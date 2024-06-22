@@ -2,6 +2,7 @@ package ya.school.todoapp.presentation.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,7 +13,6 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,6 +36,7 @@ fun ToDoListItem(
     Row(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.surfaceContainer)
+            .clickable { onInfoClick(item.id) }
             .padding(10.dp)
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
@@ -54,11 +55,7 @@ fun ToDoListItem(
             isDone = item.isDone,
             important = item.importance
         )
-        IconButton(
-            onClick = { onInfoClick(item.id) },
-        ) {
-            Icon(Icons.Outlined.Info, "Информация")
-        }
+        Icon(Icons.Outlined.Info, null)
     }
 }
 

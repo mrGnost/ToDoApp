@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 
 object DateUtil {
-    val simpleDateFormat = SimpleDateFormat("dd MMMM yyyy")
+    private val simpleDateFormat = SimpleDateFormat("dd MMMM yyyy")
 
-    fun Date.toDateString() = simpleDateFormat.format(this)
+    fun Date.toDateString(): String = simpleDateFormat.format(this)
 }

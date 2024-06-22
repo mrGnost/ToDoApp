@@ -107,7 +107,6 @@ fun HomeScreen(navigator: ToDoNavigation) {
                     onPickItem = { id ->
                         navigator.navigateToTask(id)
                     },
-                    fadeOnComplete = !showCheckedItems,
                     modifier = Modifier
                 )
             }
