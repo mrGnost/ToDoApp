@@ -38,6 +38,7 @@ fun ToDoListColumn(
     tasks: List<TodoItem>,
     onDelete: (String) -> Unit,
     onCompleteChange: (String, Boolean) -> Unit,
+    onPickItem: (String) -> Unit,
     modifier: Modifier = Modifier,
     fadeOnComplete: Boolean
 ) {
@@ -56,7 +57,8 @@ fun ToDoListColumn(
             ) {
                 ToDoListItem(
                     item = it,
-                    onCheckedChange = onCompleteChange
+                    onCheckedChange = onCompleteChange,
+                    onInfoClick = onPickItem
                 )
             }
         }

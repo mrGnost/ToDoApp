@@ -2,12 +2,16 @@ package ya.school.todoapp.presentation.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
@@ -51,6 +55,28 @@ fun ImportancePicker(
                 }
                    },
             onClick = { onPick(TodoItem.Importance.Urgent) }
+        )
+    }
+}
+
+@Composable
+fun ImportanceRow(
+    importance: TodoItem.Importance,
+    onClick: () -> Unit
+) {
+    Column(
+        horizontalAlignment = Alignment.Start,
+        modifier = Modifier
+            .clickable { onClick() }
+            .fillMaxWidth()
+    ) {
+        ToDoMainText(text = "Важность")
+        ToDoSubText(
+            text = when (importance) {
+                TodoItem.Importance.Low -> "Низкий"
+                TodoItem.Importance.Regular -> "Нет"
+                TodoItem.Importance.Urgent -> "Высокий"
+            }
         )
     }
 }

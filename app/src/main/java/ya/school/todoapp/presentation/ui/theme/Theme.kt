@@ -27,6 +27,8 @@ private val DarkColorScheme = with(DarkPalette) {
 
         onSecondaryContainer = SupportSeparator,
 
+        surfaceContainerLowest = LabelDisable,
+
         error = Red,
         errorContainer = Red,
         onErrorContainer = Pink
@@ -49,6 +51,8 @@ private val LightColorScheme = with(LightPalette) {
         surfaceContainer = BackElevated,
 
         onSecondaryContainer = SupportSeparator,
+
+        surfaceContainerLowest = LabelDisable,
 
         error = Red,
         errorContainer = Red,

@@ -49,4 +49,10 @@ class TaskFormViewModel @Inject constructor(
         }
     }
 
+    fun removeItem(id: String) {
+        viewModelScope.launch {
+            repository.removeItem(id)
+        }
+    }
+
 }

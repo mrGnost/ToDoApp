@@ -31,12 +31,10 @@ fun FormTopBar(
             }
         },
         actions = {
-            TextButton(onClick = onSave) {
-                Text(
-                    text = "СОХРАНИТЬ",
-                    color = MaterialTheme.colorScheme.primaryContainer
-                )
-            }
+            ToDoTextButton(
+                text = "Сохранить",
+                onClick = onSave
+            )
         }
     )
 }

@@ -98,6 +98,9 @@ fun HomeScreen(navigator: ToDoNavigation) {
                     onDelete = { id ->
                         viewModel.removeItem(id)
                     },
+                    onPickItem = { id ->
+                        navigator.navigateToTask(id)
+                    },
                     fadeOnComplete = !showCheckedItems,
                     modifier = Modifier
                 )

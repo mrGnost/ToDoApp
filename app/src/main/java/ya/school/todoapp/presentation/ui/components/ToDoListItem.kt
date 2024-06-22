@@ -12,6 +12,7 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,11 +25,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import ya.school.todoapp.R
 import ya.school.todoapp.data.TodoItem
+import ya.school.todoapp.presentation.ui.util.DateUtil.toDateString
 
 @Composable
 fun ToDoListItem(
     item: TodoItem,
-    onCheckedChange: (String, Boolean) -> Unit
+    onCheckedChange: (String, Boolean) -> Unit,
+    onInfoClick: (String) -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -47,11 +50,15 @@ fun ToDoListItem(
             modifier = Modifier
                 .weight(1f),
             text = item.text,
-            date = item.deadline?.toString(),
+            date = item.deadline?.toDateString(),
             isDone = item.isDone,
             important = item.importance
         )
-        Icon(Icons.Outlined.Info, "Информация")
+        IconButton(
+            onClick = { onInfoClick(item.id) },
+        ) {
+            Icon(Icons.Outlined.Info, "Информация")
+        }
     }
 }
 
@@ -65,7 +72,8 @@ fun ToDoItemContent(
 ) {
     Row(
         modifier = modifier,
-        horizontalArrangement = Arrangement.Start
+        horizontalArrangement = Arrangement.Start,
+        verticalAlignment = Alignment.CenterVertically
     ) {
         ImportanceSign(important = important)
         Column {
@@ -100,10 +108,7 @@ fun TaskDateText(
     date: String?
 ) {
     date?.let {
-        Text(
-            text = it,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
+        ToDoSubText(text = it)
     }
 }
 
