@@ -8,7 +8,6 @@ import java.util.Date
 import java.util.Random
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.coroutines.Continuation
 
 @Singleton
 class TodoItemsSource @Inject constructor() {

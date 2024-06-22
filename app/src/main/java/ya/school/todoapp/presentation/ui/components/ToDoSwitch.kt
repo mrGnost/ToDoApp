@@ -14,7 +14,11 @@ fun ToDoSwitch(
         checked = checked,
         onCheckedChange = onCheckedChange,
         colors = SwitchDefaults.colors(
-            checkedThumbColor = MaterialTheme.colorScheme.primaryContainer
+            checkedThumbColor = MaterialTheme.colorScheme.primaryContainer,
+            checkedTrackColor = MaterialTheme.colorScheme.tertiaryContainer,
+            uncheckedThumbColor = MaterialTheme.colorScheme.surfaceContainer,
+            uncheckedTrackColor = MaterialTheme.colorScheme.onTertiaryContainer,
+            uncheckedBorderColor = MaterialTheme.colorScheme.surface
         )
     )
 }

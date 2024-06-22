@@ -27,7 +27,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             navigator = ToDoNavigation(rememberNavController())
 
-            ToDoAppTheme(dynamicColor = false) {
+            ToDoAppTheme(dynamicColor = false, darkTheme = false) {
                 TodoNavGraph()
             }
         }
@@ -35,7 +35,10 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     private fun TodoNavGraph() {
-        NavHost(navController = navigator.navController, startDestination = "home") {
+        NavHost(
+            navController = navigator.navController,
+            startDestination = "home"
+        ) {
             composable(ToDoNavigation.HOME_ROUTE) {
                 HomeScreen(navigator = navigator)
             }

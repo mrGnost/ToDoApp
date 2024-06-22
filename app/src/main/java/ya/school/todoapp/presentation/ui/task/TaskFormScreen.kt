@@ -52,11 +52,12 @@ fun TaskFormScreen(navigator: ToDoNavigation, taskId: String?) {
     ) {  innerPadding ->
         MainSurface(
             modifier = Modifier
-                .verticalScroll(rememberScrollState())
                 .padding(innerPadding)
         ) {
             Column(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .verticalScroll(rememberScrollState())
+                    .fillMaxSize()
             ) {
                 FormTextInput(
                     text = viewModel.currentText,
