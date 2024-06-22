@@ -3,6 +3,7 @@ package ya.school.todoapp.presentation.ui.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,10 +12,15 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ya.school.todoapp.R
 import ya.school.todoapp.data.TodoItem
@@ -34,11 +40,11 @@ fun ImportancePicker(
             .background(MaterialTheme.colorScheme.surfaceContainer)
     ) {
         DropdownMenuItem(
-            text = { Text(text = "Нет") },
+            text = { Text(text = stringResource(id = R.string.importance_none)) },
             onClick = { onPick(TodoItem.Importance.Regular) }
         )
         DropdownMenuItem(
-            text = { Text(text = "Низкий") },
+            text = { Text(text = stringResource(id = R.string.importance_low)) },
             onClick = { onPick(TodoItem.Importance.Low) }
         )
         DropdownMenuItem(
@@ -49,7 +55,7 @@ fun ImportancePicker(
                         contentDescription = null
                     )
                     Text(
-                        text = "Высокий",
+                        text = stringResource(id = R.string.importance_high),
                         color = MaterialTheme.colorScheme.error
                     )
                 }
@@ -62,20 +68,34 @@ fun ImportancePicker(
 @Composable
 fun ImportanceRow(
     importance: TodoItem.Importance,
-    onClick: () -> Unit
+    onPick: (TodoItem.Importance) -> Unit
 ) {
-    Column(
-        horizontalAlignment = Alignment.Start,
-        modifier = Modifier
-            .clickable { onClick() }
-            .fillMaxWidth()
-    ) {
-        ToDoMainText(text = "Важность")
-        ToDoSubText(
-            text = when (importance) {
-                TodoItem.Importance.Low -> "Низкий"
-                TodoItem.Importance.Regular -> "Нет"
-                TodoItem.Importance.Urgent -> "Высокий"
+    Box {
+        var importancePickerExpanded by remember {
+            mutableStateOf(false)
+        }
+
+        Column(
+            horizontalAlignment = Alignment.Start,
+            modifier = Modifier
+                .clickable { importancePickerExpanded = true }
+                .fillMaxWidth()
+        ) {
+            ToDoMainText(text = stringResource(id = R.string.importance))
+            ToDoSubText(
+                text = when (importance) {
+                    TodoItem.Importance.Low -> stringResource(id = R.string.importance_low)
+                    TodoItem.Importance.Regular -> stringResource(id = R.string.importance_none)
+                    TodoItem.Importance.Urgent -> stringResource(id = R.string.importance_high)
+                }
+            )
+        }
+        ImportancePicker(
+            expanded = importancePickerExpanded,
+            onDismiss = { importancePickerExpanded = false },
+            onPick = {
+                onPick(it)
+                importancePickerExpanded = false
             }
         )
     }

@@ -4,8 +4,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -17,6 +19,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.res.stringResource
+import ya.school.todoapp.R
 import java.util.Date
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -31,7 +37,7 @@ fun DeadlineDatePicker(
         onDismissRequest = onDismiss,
         confirmButton = {
             ToDoTextButton(
-                text = "Готово",
+                text = stringResource(id = R.string.done),
                 onClick = {
                     onConfirm(dateState.selectedDateMillis?.let { Date(it) })
                 }
@@ -39,10 +45,14 @@ fun DeadlineDatePicker(
         },
         dismissButton = {
             ToDoTextButton(
-                text = "Отмена",
+                text = stringResource(id = R.string.cancel),
                 onClick = onDismiss
             )
-        }
+        },
+        colors = DatePickerDefaults.colors(
+            dayInSelectionRangeContainerColor = MaterialTheme.colorScheme.primaryContainer,
+            dayInSelectionRangeContentColor = MaterialTheme.colorScheme.primaryContainer
+        )
     ) {
         DatePicker(
             state = dateState,
@@ -75,9 +85,10 @@ fun DeadlineRow(
                     if (checked)
                         showCalendar = true
                 }
+                .fillMaxHeight()
                 .weight(1f)
         ) {
-            ToDoMainText(text = "Сделать до")
+            ToDoMainText(text = stringResource(id = R.string.do_before))
             if (date != null && checked) {
                 Text(
                     text = date,
