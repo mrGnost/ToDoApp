@@ -5,24 +5,25 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.sync.Mutex
 import java.util.Date
+import java.util.Random
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.coroutines.Continuation
 
 @Singleton
 class TodoItemsSource @Inject constructor() {
     private var nextId = 0
-    private val items = (1..10).map {
+    private val items = (1..30).map {
         TodoItem(
             id = "${nextId++}",
             createdAt = Date(202020),
             importance =
-            if (it % 5 == 0)
-                TodoItem.Importance.Urgent
-            else
-                TodoItem.Importance.Low,
-            isDone = false,
-            text = "Какая-то задача"
+            when (it % 3) {
+                0 -> TodoItem.Importance.Urgent
+                1 -> TodoItem.Importance.Low
+                else -> TodoItem.Importance.Regular
+            },
+            isDone = it % 4 == 0,
+            text = (1..Random().nextInt() % 15).map { "Задача" }.joinToString()
         )
     }.toMutableStateList()
 

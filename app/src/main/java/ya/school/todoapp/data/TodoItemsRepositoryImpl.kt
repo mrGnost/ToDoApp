@@ -2,7 +2,6 @@ package ya.school.todoapp.data
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import ya.school.todoapp.domain.repository.TodoItemsRepository
 import java.util.Date

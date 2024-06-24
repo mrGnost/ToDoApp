@@ -1,7 +1,9 @@
 package ya.school.todoapp.presentation.ui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -19,7 +21,8 @@ fun ElevatedContainer(
                 elevation = 2.dp,
                 shape = RoundedCornerShape(10.dp)
             )
-            .clip(RoundedCornerShape(10.dp))
+            .background(color = MaterialTheme.colorScheme.surfaceVariant)
+            .clip(RoundedCornerShape(10.dp)),
     ) {
         content()
     }

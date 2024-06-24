@@ -2,6 +2,7 @@ package ya.school.todoapp.presentation.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,15 +25,18 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import ya.school.todoapp.R
 import ya.school.todoapp.data.TodoItem
+import ya.school.todoapp.presentation.ui.util.DateUtil.toDateString
 
 @Composable
 fun ToDoListItem(
     item: TodoItem,
-    onCheckedChange: (String, Boolean) -> Unit
+    onCheckedChange: (String, Boolean) -> Unit,
+    onInfoClick: (String) -> Unit
 ) {
     Row(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.surfaceContainer)
+            .clickable { onInfoClick(item.id) }
             .padding(10.dp)
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
@@ -47,11 +51,11 @@ fun ToDoListItem(
             modifier = Modifier
                 .weight(1f),
             text = item.text,
-            date = item.deadline?.toString(),
+            date = item.deadline?.toDateString(),
             isDone = item.isDone,
             important = item.importance
         )
-        Icon(Icons.Outlined.Info, "Информация")
+        Icon(Icons.Outlined.Info, null)
     }
 }
 
@@ -65,7 +69,8 @@ fun ToDoItemContent(
 ) {
     Row(
         modifier = modifier,
-        horizontalArrangement = Arrangement.Start
+        horizontalArrangement = Arrangement.Start,
+        verticalAlignment = Alignment.CenterVertically
     ) {
         ImportanceSign(important = important)
         Column {
@@ -100,10 +105,7 @@ fun TaskDateText(
     date: String?
 ) {
     date?.let {
-        Text(
-            text = it,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
+        ToDoSubText(text = it)
     }
 }
 

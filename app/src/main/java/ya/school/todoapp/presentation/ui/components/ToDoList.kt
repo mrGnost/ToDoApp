@@ -38,8 +38,8 @@ fun ToDoListColumn(
     tasks: List<TodoItem>,
     onDelete: (String) -> Unit,
     onCompleteChange: (String, Boolean) -> Unit,
-    modifier: Modifier = Modifier,
-    fadeOnComplete: Boolean
+    onPickItem: (String) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     LazyColumn(
         modifier = modifier
@@ -50,13 +50,12 @@ fun ToDoListColumn(
         ) { _, task ->
             SwipeContainer(
                 item = task,
-                onDelete = onDelete,
-                onComplete = { onCompleteChange(it, true) },
-                fadeOnComplete = fadeOnComplete
+                onDelete = onDelete
             ) {
                 ToDoListItem(
                     item = it,
-                    onCheckedChange = onCompleteChange
+                    onCheckedChange = onCompleteChange,
+                    onInfoClick = onPickItem
                 )
             }
         }
@@ -68,29 +67,21 @@ fun ToDoListColumn(
 fun SwipeContainer(
     item: TodoItem,
     onDelete: (String) -> Unit,
-    onComplete: (String) -> Unit,
-    fadeOnComplete: Boolean,
     animationDuration: Int = 500,
     content: @Composable (TodoItem) -> Unit
 ) {
     var isRemoved by remember {
         mutableStateOf(false)
     }
-    var isComplete by remember {
-        mutableStateOf(item.isDone)
-    }
+
     val state = rememberSwipeToDismissBoxState(
         confirmValueChange = { value ->
             when (value) {
-                SwipeToDismissBoxValue.StartToEnd -> {
-                    isComplete = true
-                    fadeOnComplete
-                }
                 SwipeToDismissBoxValue.EndToStart -> {
                     isRemoved = true
                     true
                 }
-                SwipeToDismissBoxValue.Settled -> false
+                else -> false
             }
         }
     )
@@ -102,16 +93,8 @@ fun SwipeContainer(
         }
     }
 
-    LaunchedEffect(key1 = isComplete) {
-        if (isComplete) {
-            if (fadeOnComplete)
-                delay(animationDuration.toLong())
-            onComplete(item.id)
-        }
-    }
-
     AnimatedVisibility(
-        visible = !isRemoved && !(isComplete && fadeOnComplete),
+        visible = !isRemoved,
         exit = shrinkVertically(
             animationSpec = tween(durationMillis = animationDuration),
             shrinkTowards = Alignment.Top

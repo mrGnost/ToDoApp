@@ -21,11 +21,16 @@ private val DarkColorScheme = with(DarkPalette) {
         onSurface = LabelPrimary,
         onSurfaceVariant = LabelSecondary,
 
+        tertiaryContainer = LightBlue,
+
         surface = BackPrimary,
         surfaceVariant = BackSecondary,
         surfaceContainer = BackElevated,
 
         onSecondaryContainer = SupportSeparator,
+        onTertiaryContainer = SupportOverlay,
+
+        surfaceContainerLowest = LabelDisable,
 
         error = Red,
         errorContainer = Red,
@@ -44,11 +49,16 @@ private val LightColorScheme = with(LightPalette) {
         onSurface = LabelPrimary,
         onSurfaceVariant = LabelSecondary,
 
+        tertiaryContainer = LightBlue,
+
         surface = BackPrimary,
         surfaceVariant = BackSecondary,
         surfaceContainer = BackElevated,
 
         onSecondaryContainer = SupportSeparator,
+        onTertiaryContainer = SupportOverlay,
+
+        surfaceContainerLowest = LabelDisable,
 
         error = Red,
         errorContainer = Red,

@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import ya.school.todoapp.data.TodoItem
 import ya.school.todoapp.domain.repository.TodoItemsRepository
 import javax.inject.Inject
