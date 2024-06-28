@@ -21,7 +21,7 @@ import ya.school.todoapp.R
 import ya.school.todoapp.presentation.ui.ToDoNavigation
 import ya.school.todoapp.presentation.ui.components.DeadlineRow
 import ya.school.todoapp.presentation.ui.components.FormTextInput
-import ya.school.todoapp.presentation.ui.components.FormTopBar
+import ya.school.todoapp.presentation.ui.components.topbars.FormTopBar
 import ya.school.todoapp.presentation.ui.components.ImportanceRow
 import ya.school.todoapp.presentation.ui.components.MainSurface
 import ya.school.todoapp.presentation.ui.components.RemoveButton
@@ -41,11 +41,11 @@ fun TaskFormScreen(navigator: ToDoNavigation, taskId: String?) {
         topBar = {
             FormTopBar(
                 onClose = {
-                    navigator.navigateBack()
+                    navigator.navigateToHome()
                 },
                 onSave = {
                     viewModel.saveItem(taskId)
-                    navigator.navigateBack()
+                    navigator.navigateToHome()
                 }
             )
         }
@@ -87,7 +87,7 @@ fun TaskFormScreen(navigator: ToDoNavigation, taskId: String?) {
                         isActive = taskId != null,
                         onClick = {
                             viewModel.removeItem(taskId!!)
-                            navigator.navigateBack()
+                            navigator.navigateToHome()
                         }
                     )
                 }

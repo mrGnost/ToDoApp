@@ -1,9 +1,9 @@
 package ya.school.todoapp.presentation.ui.components
 
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import ya.school.todoapp.presentation.ui.theme.AppTheme
 
 @Composable
 fun ToDoMainText(
@@ -12,8 +12,8 @@ fun ToDoMainText(
 ) {
     Text(
         text = text,
-        color = MaterialTheme.colorScheme.onSurface,
-        style = MaterialTheme.typography.bodyLarge,
+        color = AppTheme.colors.labelPrimary,
+        style = AppTheme.typography.bodyLarge,
         modifier = modifier
     )
 }
@@ -25,8 +25,8 @@ fun ToDoSubText(
 ) {
     Text(
         text = text,
-        color = MaterialTheme.colorScheme.onSurfaceVariant,
-        style = MaterialTheme.typography.titleSmall,
+        color = AppTheme.colors.labelTertiary,
+        style = AppTheme.typography.titleSmall,
         modifier = modifier
     )
 }

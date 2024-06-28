@@ -18,7 +18,7 @@ import ya.school.todoapp.presentation.ui.theme.ToDoAppTheme
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    lateinit var navigator: ToDoNavigation
+    private lateinit var navigator: ToDoNavigation
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +27,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             navigator = ToDoNavigation(rememberNavController())
 
-            ToDoAppTheme(dynamicColor = false, darkTheme = false) {
+            ToDoAppTheme {
                 TodoNavGraph()
             }
         }

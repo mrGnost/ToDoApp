@@ -1,6 +1,5 @@
 package ya.school.todoapp.presentation.ui.home
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -8,10 +7,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -31,7 +27,8 @@ import ya.school.todoapp.presentation.ui.components.ElevatedContainer
 import ya.school.todoapp.presentation.ui.components.MainSurface
 import ya.school.todoapp.presentation.ui.components.ToDoFAB
 import ya.school.todoapp.presentation.ui.components.ToDoListColumn
-import ya.school.todoapp.presentation.ui.components.ToDoSubText
+import ya.school.todoapp.presentation.ui.components.topbars.MainTopBar
+import ya.school.todoapp.presentation.ui.theme.AppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -48,31 +45,17 @@ fun HomeScreen(navigator: ToDoNavigation) {
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = {
-                    Column {
-                        Text(stringResource(id = R.string.my_tasks))
-                        ToDoSubText(text = "Выполнено - ${todoItems.count { it.isDone }}")
-                    }
-                },
-                scrollBehavior = scrollBehavior,
-                actions = {
-                    IconButton(onClick = {
-                        showCheckedItems = !showCheckedItems
-                    }) {
-                        val visibilityIcon = when (showCheckedItems) {
-                            true -> R.drawable.visible
-                            false -> R.drawable.invisible
-                        }
-
-                        Icon(
-                            painter = painterResource(id = visibilityIcon),
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primaryContainer
-                        )
-                    }
+            MainTopBar(
+                text = stringResource(id = R.string.my_tasks),
+                subtext = "Выполнено - ${todoItems.count { it.isDone }}",
+                scrollBehavior = scrollBehavior
+            ) {
+                VisibilityButton(
+                    show = showCheckedItems
+                ) {
+                    showCheckedItems = !showCheckedItems
                 }
-            )
+            }
         },
         floatingActionButton = {
             ToDoFAB(onClick = {
@@ -110,5 +93,28 @@ fun HomeScreen(navigator: ToDoNavigation) {
                 )
             }
         }
+    }
+}
+
+@Composable
+fun VisibilityButton(
+    modifier: Modifier = Modifier,
+    show: Boolean = true,
+    onClick: () -> Unit
+) {
+    IconButton(
+        modifier = modifier,
+        onClick = onClick
+    ) {
+        val visibilityIcon = when (show) {
+            true -> R.drawable.visible
+            false -> R.drawable.invisible
+        }
+
+        Icon(
+            painter = painterResource(id = visibilityIcon),
+            contentDescription = null,
+            tint = AppTheme.colors.blue
+        )
     }
 }

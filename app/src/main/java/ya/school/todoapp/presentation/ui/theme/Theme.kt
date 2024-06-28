@@ -1,91 +1,83 @@
 package ya.school.todoapp.presentation.ui.theme
 
-import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
-import androidx.compose.material3.lightColorScheme
+import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.staticCompositionLocalOf
 
-private val DarkColorScheme = with(DarkPalette) {
-    darkColorScheme(
-        primaryContainer = Blue,
-        onPrimaryContainer = White,
+fun lightColors(): AppColors = AppColors(
+    supportSeparator = LightPalette.SupportSeparator,
+    supportOverlay = LightPalette.SupportOverlay,
+    labelPrimary = LightPalette.LabelPrimary,
+    labelSecondary = LightPalette.LabelSecondary,
+    labelTertiary = LightPalette.LabelTertiary,
+    labelDisable = LightPalette.LabelDisable,
+    red = LightPalette.Red,
+    pink = LightPalette.Pink,
+    green = LightPalette.Green,
+    blue = LightPalette.Blue,
+    lightBlue = LightPalette.LightBlue,
+    gray = LightPalette.Gray,
+    grayLight = LightPalette.GrayLight,
+    white = LightPalette.White,
+    backPrimary = LightPalette.BackPrimary,
+    backSecondary = LightPalette.BackSecondary,
+    backElevated = LightPalette.BackElevated,
+    isLight = true
+)
 
-        secondary = Green,
-        onSecondary = White,
+fun darkColors(): AppColors = AppColors(
+    supportSeparator = DarkPalette.SupportSeparator,
+    supportOverlay = DarkPalette.SupportOverlay,
+    labelPrimary = DarkPalette.LabelPrimary,
+    labelSecondary = DarkPalette.LabelSecondary,
+    labelTertiary = DarkPalette.LabelTertiary,
+    labelDisable = DarkPalette.LabelDisable,
+    red = DarkPalette.Red,
+    pink = DarkPalette.Pink,
+    green = DarkPalette.Green,
+    blue = DarkPalette.Blue,
+    lightBlue = DarkPalette.LightBlue,
+    gray = DarkPalette.Gray,
+    grayLight = DarkPalette.GrayLight,
+    white = DarkPalette.White,
+    backPrimary = DarkPalette.BackPrimary,
+    backSecondary = DarkPalette.BackSecondary,
+    backElevated = DarkPalette.BackElevated,
+    isLight = false
+)
 
-        onSurface = LabelPrimary,
-        onSurfaceVariant = LabelSecondary,
+internal val LocalColors = staticCompositionLocalOf{ lightColors() }
+internal val LocalTypography = staticCompositionLocalOf { Typography }
 
-        tertiaryContainer = LightBlue,
-
-        surface = BackPrimary,
-        surfaceVariant = BackSecondary,
-        surfaceContainer = BackElevated,
-
-        onSecondaryContainer = SupportSeparator,
-        onTertiaryContainer = SupportOverlay,
-
-        surfaceContainerLowest = LabelDisable,
-
-        error = Red,
-        errorContainer = Red,
-        onErrorContainer = Pink
-    )
-}
-
-private val LightColorScheme = with(LightPalette) {
-    lightColorScheme(
-        primaryContainer = Blue,
-        onPrimaryContainer = White,
-
-        secondary = Green,
-        onSecondary = White,
-
-        onSurface = LabelPrimary,
-        onSurfaceVariant = LabelSecondary,
-
-        tertiaryContainer = LightBlue,
-
-        surface = BackPrimary,
-        surfaceVariant = BackSecondary,
-        surfaceContainer = BackElevated,
-
-        onSecondaryContainer = SupportSeparator,
-        onTertiaryContainer = SupportOverlay,
-
-        surfaceContainerLowest = LabelDisable,
-
-        error = Red,
-        errorContainer = Red,
-        onErrorContainer = Pink
-    )
+object AppTheme {
+    val colors: AppColors
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalColors.current
+    val typography: Typography
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalTypography.current
 }
 
 @Composable
 fun ToDoAppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+    val colors = when {
+        darkTheme -> darkColors()
+        else -> lightColors()
     }
-
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = Typography,
-        content = content
-    )
+    val rememberedColors = remember { colors.copy() }
+    CompositionLocalProvider(
+        LocalColors provides rememberedColors,
+        LocalTypography provides Typography
+    ) {
+        content()
+    }
 }

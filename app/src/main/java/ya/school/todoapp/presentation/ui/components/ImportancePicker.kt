@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -24,6 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ya.school.todoapp.R
 import ya.school.todoapp.data.TodoItem
+import ya.school.todoapp.presentation.ui.theme.AppTheme
 
 @Composable
 fun ImportancePicker(
@@ -37,7 +37,7 @@ fun ImportancePicker(
         onDismissRequest = onDismiss,
         modifier = modifier
             .shadow(elevation = 2.dp)
-            .background(MaterialTheme.colorScheme.surfaceContainer)
+            .background(AppTheme.colors.backElevated)
     ) {
         DropdownMenuItem(
             text = { Text(text = stringResource(id = R.string.importance_none)) },
@@ -56,7 +56,7 @@ fun ImportancePicker(
                     )
                     Text(
                         text = stringResource(id = R.string.importance_high),
-                        color = MaterialTheme.colorScheme.error
+                        color = AppTheme.colors.red
                     )
                 }
                    },

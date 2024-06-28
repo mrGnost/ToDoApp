@@ -5,10 +5,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import ya.school.todoapp.presentation.ui.theme.AppTheme
 
 @Composable
 fun RemoveButton(
@@ -23,11 +23,11 @@ fun RemoveButton(
                     onClick()
             }
     ) {
-        val color = with (MaterialTheme.colorScheme) {
+        val color = with (AppTheme.colors) {
             if (isActive)
-                error
+                red
             else
-                surfaceContainerLowest
+                labelDisable
         }
 
         Icon(

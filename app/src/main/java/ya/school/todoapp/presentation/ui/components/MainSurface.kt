@@ -4,10 +4,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import ya.school.todoapp.presentation.ui.theme.AppTheme
 
 @Composable
 fun MainSurface(
@@ -16,7 +16,7 @@ fun MainSurface(
 ) {
     Box(
         modifier = modifier
-            .background(MaterialTheme.colorScheme.surface)
+            .background(AppTheme.colors.backPrimary)
             .padding(12.dp)
             .fillMaxSize()
     ) {

@@ -11,7 +11,6 @@ import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
@@ -23,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ya.school.todoapp.R
+import ya.school.todoapp.presentation.ui.theme.AppTheme
 import ya.school.todoapp.presentation.ui.util.DateUtil.getYear
 import ya.school.todoapp.presentation.ui.util.DateUtil.toWeekDayDateString
 import java.util.Date
@@ -70,10 +70,10 @@ fun DeadlineDatePicker(
                 )
             },
             colors = DatePickerDefaults.colors(
-                selectedDayContainerColor = MaterialTheme.colorScheme.primaryContainer,
-                selectedYearContainerColor = MaterialTheme.colorScheme.primaryContainer,
-                dividerColor = MaterialTheme.colorScheme.primaryContainer,
-                todayDateBorderColor = MaterialTheme.colorScheme.primaryContainer,
+                selectedDayContainerColor = AppTheme.colors.blue,
+                selectedYearContainerColor = AppTheme.colors.blue,
+                dividerColor = AppTheme.colors.blue,
+                todayDateBorderColor = AppTheme.colors.blue,
             )
         )
     }
@@ -110,13 +110,16 @@ fun DeadlineRow(
             if (date != null && checked) {
                 Text(
                     text = date,
-                    color = MaterialTheme.colorScheme.primaryContainer
+                    color = AppTheme.colors.blue
                 )
             }
         }
         ToDoSwitch(
             checked = checked,
-            onCheckedChange = { checked = !checked }
+            onCheckedChange = {
+                checked = !checked
+                showCalendar = true
+            }
         )
         if (showCalendar) {
             DeadlineDatePicker(
