@@ -6,6 +6,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import ya.school.todoapp.presentation.ui.theme.AppTheme
 
 @Composable
@@ -39,4 +40,10 @@ fun FormTextInput(
             )
         )
     }
+}
+
+@Preview
+@Composable
+fun FormTextInputPreview() {
+    FormTextInput(text = "", onTextChange = {}, hint = "Подсказка")
 }

@@ -18,9 +18,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import ya.school.todoapp.R
 import ya.school.todoapp.presentation.ui.ToDoNavigation
 import ya.school.todoapp.presentation.ui.components.ElevatedContainer
@@ -29,6 +32,7 @@ import ya.school.todoapp.presentation.ui.components.ToDoFAB
 import ya.school.todoapp.presentation.ui.components.ToDoListColumn
 import ya.school.todoapp.presentation.ui.components.topbars.MainTopBar
 import ya.school.todoapp.presentation.ui.theme.AppTheme
+import ya.school.todoapp.presentation.ui.theme.ToDoAppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -116,5 +120,21 @@ fun VisibilityButton(
             contentDescription = null,
             tint = AppTheme.colors.blue
         )
+    }
+}
+
+@Preview
+@Composable
+fun HomeScreenPreviewLight() {
+    ToDoAppTheme(darkTheme = false) {
+        HomeScreen(navigator = ToDoNavigation(NavHostController(LocalContext.current)))
+    }
+}
+
+@Preview
+@Composable
+fun HomeScreenPreviewDark() {
+    ToDoAppTheme(darkTheme = true) {
+        HomeScreen(navigator = ToDoNavigation(NavHostController(LocalContext.current)))
     }
 }

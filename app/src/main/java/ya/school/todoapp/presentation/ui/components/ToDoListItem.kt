@@ -21,11 +21,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ya.school.todoapp.R
 import ya.school.todoapp.data.TodoItem
 import ya.school.todoapp.presentation.ui.theme.AppTheme
 import ya.school.todoapp.presentation.ui.util.DateUtil.toDateString
+import java.util.Date
 
 @Composable
 fun ToDoListItem(
@@ -161,4 +163,49 @@ fun ToDoCheckBox(
             onCheckedChange(id, !checked)
         }
     )
+}
+
+@Preview
+@Composable
+fun ToDoListItemPreviewImportant() {
+    val item = TodoItem(
+        "0",
+        "элемент",
+        TodoItem.Importance.Urgent,
+        isDone = false,
+        createdAt = Date(0)
+    )
+    ToDoListItem(item = item, onCheckedChange = {x, y -> }) {
+
+    }
+}
+
+@Preview
+@Composable
+fun ToDoListItemPreviewLow() {
+    val item = TodoItem(
+        "0",
+        "элемент",
+        TodoItem.Importance.Low,
+        isDone = false,
+        createdAt = Date(0)
+    )
+    ToDoListItem(item = item, onCheckedChange = {x, y -> }) {
+
+    }
+}
+
+@Preview
+@Composable
+fun ToDoListItemPreviewChecked() {
+    val item = TodoItem(
+        "0",
+        "элемент",
+        TodoItem.Importance.Regular,
+        isDone = true,
+        createdAt = Date(0)
+    )
+    ToDoListItem(item = item, onCheckedChange = {x, y -> }) {
+
+    }
 }
