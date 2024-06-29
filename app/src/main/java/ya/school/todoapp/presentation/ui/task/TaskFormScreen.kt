@@ -15,6 +15,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -23,14 +24,15 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import kotlinx.coroutines.launch
 import ya.school.todoapp.R
 import ya.school.todoapp.presentation.ui.ToDoNavigation
 import ya.school.todoapp.presentation.ui.components.DeadlineRow
 import ya.school.todoapp.presentation.ui.components.FormTextInput
-import ya.school.todoapp.presentation.ui.components.topbars.FormTopBar
 import ya.school.todoapp.presentation.ui.components.ImportanceRow
 import ya.school.todoapp.presentation.ui.components.MainSurface
 import ya.school.todoapp.presentation.ui.components.RemoveButton
+import ya.school.todoapp.presentation.ui.components.topbars.FormTopBar
 import ya.school.todoapp.presentation.ui.theme.ToDoAppTheme
 import ya.school.todoapp.presentation.ui.util.DateUtil.toDateString
 
@@ -38,6 +40,7 @@ import ya.school.todoapp.presentation.ui.util.DateUtil.toDateString
 fun TaskFormScreen(navigator: ToDoNavigation, taskId: String?) {
     val viewModel: TaskFormViewModel = hiltViewModel()
     val snackbarHostState = remember { SnackbarHostState() }
+    val composableScope = rememberCoroutineScope()
 
     LaunchedEffect(key1 = Unit) {
         taskId?.let {
@@ -59,8 +62,12 @@ fun TaskFormScreen(navigator: ToDoNavigation, taskId: String?) {
                     navigator.navigateToHome()
                 },
                 onSave = {
-                    viewModel.saveItem(taskId)
-                    navigator.navigateToHome()
+                    composableScope.launch {
+                        if (viewModel.saveItem(taskId)) {
+                            viewModel.finish()
+                            navigator.navigateToHome()
+                        }
+                    }
                 }
             )
         },
@@ -104,8 +111,12 @@ fun TaskFormScreen(navigator: ToDoNavigation, taskId: String?) {
                     RemoveButton(
                         isActive = taskId != null,
                         onClick = {
-                            viewModel.removeItem(taskId!!)
-                            navigator.navigateToHome()
+                            composableScope.launch {
+                                if (viewModel.removeItem(taskId!!)) {
+                                    viewModel.finish()
+                                    navigator.navigateToHome()
+                                }
+                            }
                         }
                     )
                 }

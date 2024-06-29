@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -51,6 +52,10 @@ class HomeViewModel @Inject constructor(
                 processError(result.message)
             }
         }
+    }
+
+    fun finish() {
+        viewModelScope.cancel()
     }
 
     private fun processError(message: String) {

@@ -6,6 +6,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import ya.school.todoapp.data.TodoItem
 import ya.school.todoapp.domain.entity.TodoResult
@@ -37,9 +39,9 @@ class TaskFormViewModel @Inject constructor(
         }
     }
 
-    fun saveItem(id: String?) {
-        viewModelScope.launch {
-            val result = if (id == null) {
+    suspend fun saveItem(id: String?): Boolean {
+        val result = viewModelScope.async {
+            if (id == null) {
                 repository.addItem(
                     text = currentText,
                     importance = currentImportance,
@@ -53,19 +55,31 @@ class TaskFormViewModel @Inject constructor(
                     deadline = currentDate
                 )
             }
-            if (result is TodoResult.Error<*>) {
+        }.await() // Требование: отменять всю background work при уходе с экрана - но нам нужно доделать сохранение
+        return processEmptyResult(result)
+    }
+
+    suspend fun removeItem(id: String): Boolean {
+        val result = viewModelScope.async {
+            repository.removeItem(id)
+        }.await()
+        return processEmptyResult(result)
+    }
+
+    private fun processEmptyResult(result: TodoResult<Unit>): Boolean {
+        return when (result) {
+            is TodoResult.Success -> {
+                true
+            }
+            is TodoResult.Error<*> -> {
                 processError(result.message)
+                false
             }
         }
     }
 
-    fun removeItem(id: String) {
-        viewModelScope.launch {
-            val result = repository.removeItem(id)
-            if (result is TodoResult.Error<*>) {
-                processError(result.message)
-            }
-        }
+    fun finish() {
+        viewModelScope.cancel()
     }
 
     private fun processError(message: String) {

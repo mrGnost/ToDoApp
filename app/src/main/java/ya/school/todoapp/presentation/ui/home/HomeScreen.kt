@@ -79,6 +79,7 @@ fun HomeScreen(navigator: ToDoNavigation) {
         floatingActionButton = {
             ToDoFAB(onClick = {
                 navigator.navigateToTaskForm()
+                viewModel.finish()
             }) {
                 Icon(
                     Icons.Filled.Add,
@@ -110,6 +111,7 @@ fun HomeScreen(navigator: ToDoNavigation) {
                     },
                     onPickItem = { id ->
                         navigator.navigateToTask(id)
+                        viewModel.finish()
                     },
                     modifier = Modifier
                 )

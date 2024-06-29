@@ -12,7 +12,7 @@ class TodoItemsRepositoryImpl @Inject constructor(
     private val dataSource: TodoItemsSource
 ) : TodoItemsRepository {
     override fun getItems(): TodoResult<Flow<List<TodoItem>>> {
-        return TodoResult.Success(dataSource.itemsFlow)
+        return dataSource.itemsFlow
     }
 
     override suspend fun addItem(
@@ -20,18 +20,18 @@ class TodoItemsRepositoryImpl @Inject constructor(
         importance: TodoItem.Importance,
         deadline: Date?
     ): TodoResult<Unit> = withContext(Dispatchers.IO) {
-        TodoResult.Success(dataSource.addItem(text, importance, deadline))
+        dataSource.addItem(text, importance, deadline)
     }
 
     override suspend fun changeCompletionStatus(
         id: String,
         complete: Boolean
     ): TodoResult<Unit> = withContext(Dispatchers.IO) {
-        TodoResult.Success(dataSource.changeCheckedStatus(id, complete))
+        dataSource.changeCheckedStatus(id, complete)
     }
 
     override suspend fun removeItem(id: String): TodoResult<Unit> = withContext(Dispatchers.IO) {
-        TodoResult.Success(dataSource.removeItem(id))
+        dataSource.removeItem(id)
     }
 
     override suspend fun changeItem(
@@ -40,10 +40,10 @@ class TodoItemsRepositoryImpl @Inject constructor(
         importance: TodoItem.Importance,
         deadline: Date?
     ): TodoResult<Unit> = withContext(Dispatchers.IO) {
-        TodoResult.Success(dataSource.changeItem(id, text, importance, deadline))
+        dataSource.changeItem(id, text, importance, deadline)
     }
 
     override suspend fun getItem(id: String): TodoResult<TodoItem> = withContext(Dispatchers.IO) {
-        TodoResult.Success(dataSource.getItem(id))
+        dataSource.getItem(id)
     }
 }
