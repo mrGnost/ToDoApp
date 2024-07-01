@@ -4,6 +4,7 @@ import androidx.compose.runtime.toMutableStateList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.sync.Mutex
+import ya.school.todoapp.domain.entity.TodoResult
 import java.util.Date
 import java.util.Random
 import javax.inject.Inject
@@ -30,8 +31,8 @@ class TodoItemsSource @Inject constructor() {
     private val _itemsFlow = MutableStateFlow<List<TodoItem>>(items)
     private val mutex = Mutex()
 
-    val itemsFlow: Flow<List<TodoItem>>
-        get() = _itemsFlow
+    val itemsFlow: TodoResult<Flow<List<TodoItem>>>
+        get() = TodoResult.Success(_itemsFlow)
 
     suspend fun addItem(
         text: String,
@@ -46,21 +47,31 @@ class TodoItemsSource @Inject constructor() {
             isDone = false,
             createdAt = Date()
         )
-        _itemsFlow.emit(
-            items.apply {
-                add(newItem)
-            }
-        )
+        try {
+            _itemsFlow.emit(
+                items.apply {
+                    add(newItem)
+                }
+            )
+            TodoResult.Success(Unit)
+        } catch (e: RuntimeException) {
+            TodoResult.Error("Не удалось добавить элемент")
+        }
     }
 
     suspend fun removeItem(itemId: String) = withLock {
-        _itemsFlow.emit(
-            items.apply {
-                removeAt(
-                    indexOfFirst { it.id == itemId }
-                )
-            }
-        )
+        try {
+            _itemsFlow.emit(
+                items.apply {
+                    removeAt(
+                        indexOfFirst { it.id == itemId }
+                    )
+                }
+            )
+            TodoResult.Success(Unit)
+        } catch (e: RuntimeException) {
+            TodoResult.Error("Не удалось удалить элемент")
+        }
     }
 
     suspend fun changeItem(
@@ -69,34 +80,48 @@ class TodoItemsSource @Inject constructor() {
         importance: TodoItem.Importance,
         deadline: Date?
     ) = withLock {
-        _itemsFlow.emit(
-            items.apply {
-                val index = indexOfFirst { it.id == itemId }
-                this[index] = this[index].copy(
-                    text = text,
-                    importance = importance,
-                    deadline = deadline
-                )
-            }
-        )
+        try {
+            _itemsFlow.emit(
+                items.apply {
+                    val index = indexOfFirst { it.id == itemId }
+                    this[index] = this[index].copy(
+                        text = text,
+                        importance = importance,
+                        deadline = deadline
+                    )
+                }
+            )
+            TodoResult.Success(Unit)
+        } catch (e: RuntimeException) {
+            TodoResult.Error("Не удалось внести изменения")
+        }
     }
 
     suspend fun changeCheckedStatus(
         itemId: String,
         isDone: Boolean
     ) = withLock {
-        _itemsFlow.emit(
-            items.apply {
-                val index = indexOfFirst { it.id == itemId }
-                this[index] = this[index].copy(
-                    isDone = isDone
-                )
-            }
-        )
+        try {
+            _itemsFlow.emit(
+                items.apply {
+                    val index = indexOfFirst { it.id == itemId }
+                    this[index] = this[index].copy(
+                        isDone = isDone
+                    )
+                }
+            )
+            TodoResult.Success(Unit)
+        } catch (e: RuntimeException) {
+            TodoResult.Error("Не удалось изменить статус задачи")
+        }
     }
 
-    suspend fun getItem(id: String): TodoItem = withLock {
-        items.first { it.id == id }
+    suspend fun getItem(id: String): TodoResult<TodoItem> = withLock {
+        try {
+            TodoResult.Success(items.first { it.id == id })
+        } catch (e: RuntimeException) {
+            TodoResult.Error("Задача не найдена")
+        }
     }
 
     private suspend fun<T> withLock(action: suspend () -> T): T {

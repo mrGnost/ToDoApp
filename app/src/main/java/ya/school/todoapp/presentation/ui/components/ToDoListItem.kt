@@ -13,7 +13,6 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -22,10 +21,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ya.school.todoapp.R
 import ya.school.todoapp.data.TodoItem
+import ya.school.todoapp.presentation.ui.theme.AppTheme
 import ya.school.todoapp.presentation.ui.util.DateUtil.toDateString
+import java.util.Date
 
 @Composable
 fun ToDoListItem(
@@ -35,7 +37,7 @@ fun ToDoListItem(
 ) {
     Row(
         modifier = Modifier
-            .background(MaterialTheme.colorScheme.surfaceContainer)
+            .background(AppTheme.colors.backSecondary)
             .clickable { onInfoClick(item.id) }
             .padding(10.dp)
             .fillMaxWidth(),
@@ -55,7 +57,11 @@ fun ToDoListItem(
             isDone = item.isDone,
             important = item.importance
         )
-        Icon(Icons.Outlined.Info, null)
+        Icon(
+            Icons.Outlined.Info,
+            null,
+            tint = AppTheme.colors.labelTertiary
+        )
     }
 }
 
@@ -114,11 +120,11 @@ fun TaskPreviewText(
     text: String,
     isCrossed: Boolean
 ) {
-    val color = with(MaterialTheme.colorScheme) {
+    val color = with(AppTheme.colors) {
         if (isCrossed)
-            onSurfaceVariant
+            labelTertiary
         else
-            onSurface
+            labelPrimary
     }
     val decorator = if (isCrossed) TextDecoration.LineThrough else null
 
@@ -144,12 +150,12 @@ fun ToDoCheckBox(
     Checkbox(
         checked = checked,
         colors = CheckboxDefaults.colors(
-            checkedColor = MaterialTheme.colorScheme.secondary,
-            uncheckedColor = with (MaterialTheme.colorScheme) {
+            checkedColor = AppTheme.colors.green,
+            uncheckedColor = with (AppTheme.colors) {
                 if (important)
-                    errorContainer
+                    red
                 else
-                    onSecondaryContainer
+                    supportSeparator
             },
 
         ),
@@ -157,4 +163,49 @@ fun ToDoCheckBox(
             onCheckedChange(id, !checked)
         }
     )
+}
+
+@Preview
+@Composable
+fun ToDoListItemPreviewImportant() {
+    val item = TodoItem(
+        "0",
+        "элемент",
+        TodoItem.Importance.Urgent,
+        isDone = false,
+        createdAt = Date(0)
+    )
+    ToDoListItem(item = item, onCheckedChange = {x, y -> }) {
+
+    }
+}
+
+@Preview
+@Composable
+fun ToDoListItemPreviewLow() {
+    val item = TodoItem(
+        "0",
+        "элемент",
+        TodoItem.Importance.Low,
+        isDone = false,
+        createdAt = Date(0)
+    )
+    ToDoListItem(item = item, onCheckedChange = {x, y -> }) {
+
+    }
+}
+
+@Preview
+@Composable
+fun ToDoListItemPreviewChecked() {
+    val item = TodoItem(
+        "0",
+        "элемент",
+        TodoItem.Importance.Regular,
+        isDone = true,
+        createdAt = Date(0)
+    )
+    ToDoListItem(item = item, onCheckedChange = {x, y -> }) {
+
+    }
 }

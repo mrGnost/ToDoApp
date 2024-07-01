@@ -10,26 +10,37 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import kotlinx.coroutines.launch
 import ya.school.todoapp.R
 import ya.school.todoapp.presentation.ui.ToDoNavigation
 import ya.school.todoapp.presentation.ui.components.DeadlineRow
 import ya.school.todoapp.presentation.ui.components.FormTextInput
-import ya.school.todoapp.presentation.ui.components.FormTopBar
 import ya.school.todoapp.presentation.ui.components.ImportanceRow
 import ya.school.todoapp.presentation.ui.components.MainSurface
 import ya.school.todoapp.presentation.ui.components.RemoveButton
+import ya.school.todoapp.presentation.ui.components.topbars.FormTopBar
+import ya.school.todoapp.presentation.ui.theme.ToDoAppTheme
 import ya.school.todoapp.presentation.ui.util.DateUtil.toDateString
 
 @Composable
 fun TaskFormScreen(navigator: ToDoNavigation, taskId: String?) {
     val viewModel: TaskFormViewModel = hiltViewModel()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val composableScope = rememberCoroutineScope()
 
     LaunchedEffect(key1 = Unit) {
         taskId?.let {
@@ -37,17 +48,31 @@ fun TaskFormScreen(navigator: ToDoNavigation, taskId: String?) {
         }
     }
 
+    LaunchedEffect(key1 = viewModel.snackBarMessage) {
+        viewModel.snackBarMessage?.let {
+            snackbarHostState.showSnackbar(it)
+            viewModel.snackBarMessage = null
+        }
+    }
+
     Scaffold(
         topBar = {
             FormTopBar(
                 onClose = {
-                    navigator.navigateBack()
+                    navigator.navigateToHome()
                 },
                 onSave = {
-                    viewModel.saveItem(taskId)
-                    navigator.navigateBack()
+                    composableScope.launch {
+                        if (viewModel.saveItem(taskId)) {
+                            viewModel.finish()
+                            navigator.navigateToHome()
+                        }
+                    }
                 }
             )
+        },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
         }
     ) {  innerPadding ->
         MainSurface(
@@ -86,12 +111,38 @@ fun TaskFormScreen(navigator: ToDoNavigation, taskId: String?) {
                     RemoveButton(
                         isActive = taskId != null,
                         onClick = {
-                            viewModel.removeItem(taskId!!)
-                            navigator.navigateBack()
+                            composableScope.launch {
+                                if (viewModel.removeItem(taskId!!)) {
+                                    viewModel.finish()
+                                    navigator.navigateToHome()
+                                }
+                            }
                         }
                     )
                 }
             }
         }
+    }
+}
+
+@Preview
+@Composable
+fun TaskFormScreenPreviewLight() {
+    ToDoAppTheme(darkTheme = false) {
+        TaskFormScreen(
+            navigator = ToDoNavigation(NavHostController(LocalContext.current)),
+            taskId = "0"
+        )
+    }
+}
+
+@Preview
+@Composable
+fun TaskFormScreenPreviewDark() {
+    ToDoAppTheme(darkTheme = true) {
+        TaskFormScreen(
+            navigator = ToDoNavigation(NavHostController(LocalContext.current)),
+            taskId = "0"
+        )
     }
 }

@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,7 +16,6 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.SwipeToDismissBoxState
 import androidx.compose.material3.SwipeToDismissBoxValue
@@ -32,7 +32,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import ya.school.todoapp.data.TodoItem
+import ya.school.todoapp.presentation.ui.theme.AppTheme
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ToDoListColumn(
     tasks: List<TodoItem>,
@@ -50,7 +52,8 @@ fun ToDoListColumn(
         ) { _, task ->
             SwipeContainer(
                 item = task,
-                onDelete = onDelete
+                onDelete = onDelete,
+                modifier = Modifier.animateItemPlacement()
             ) {
                 ToDoListItem(
                     item = it,
@@ -67,6 +70,7 @@ fun ToDoListColumn(
 fun SwipeContainer(
     item: TodoItem,
     onDelete: (String) -> Unit,
+    modifier: Modifier = Modifier,
     animationDuration: Int = 500,
     content: @Composable (TodoItem) -> Unit
 ) {
@@ -98,13 +102,14 @@ fun SwipeContainer(
         exit = shrinkVertically(
             animationSpec = tween(durationMillis = animationDuration),
             shrinkTowards = Alignment.Top
-        ) + fadeOut()
+        ) + fadeOut(),
+        modifier = modifier
     ) {
         SwipeToDismissBox(
             state = state,
             backgroundContent = {
                 SwipeBackground(swipeDismissState = state)
-            }
+            },
         ) {
             content(item)
         }
@@ -117,8 +122,8 @@ fun SwipeBackground(
     swipeDismissState: SwipeToDismissBoxState
 ) {
     val color = when (swipeDismissState.dismissDirection) {
-        SwipeToDismissBoxValue.StartToEnd -> MaterialTheme.colorScheme.secondary
-        SwipeToDismissBoxValue.EndToStart -> MaterialTheme.colorScheme.error
+        SwipeToDismissBoxValue.StartToEnd -> AppTheme.colors.green
+        SwipeToDismissBoxValue.EndToStart -> AppTheme.colors.red
         SwipeToDismissBoxValue.Settled -> Color.Transparent
     }
     val alignment = when (swipeDismissState.dismissDirection) {
@@ -140,7 +145,7 @@ fun SwipeBackground(
         Icon(
             imageVector = icon,
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.onSecondary
+            tint = AppTheme.colors.white
         )
     }
 }

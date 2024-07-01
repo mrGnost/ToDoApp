@@ -6,6 +6,8 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
+import ya.school.todoapp.presentation.ui.theme.AppTheme
 
 @Composable
 fun FormTextInput(
@@ -28,8 +30,20 @@ fun FormTextInput(
             colors = TextFieldDefaults.colors(
                 focusedIndicatorColor = Color.Transparent,
                 disabledIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent
+                unfocusedIndicatorColor = Color.Transparent,
+                focusedContainerColor = AppTheme.colors.backSecondary,
+                unfocusedContainerColor = AppTheme.colors.backSecondary,
+                focusedTextColor = AppTheme.colors.labelPrimary,
+                unfocusedTextColor = AppTheme.colors.labelPrimary,
+                focusedPlaceholderColor = AppTheme.colors.labelTertiary,
+                unfocusedPlaceholderColor = AppTheme.colors.labelTertiary
             )
         )
     }
+}
+
+@Preview
+@Composable
+fun FormTextInputPreview() {
+    FormTextInput(text = "", onTextChange = {}, hint = "Подсказка")
 }

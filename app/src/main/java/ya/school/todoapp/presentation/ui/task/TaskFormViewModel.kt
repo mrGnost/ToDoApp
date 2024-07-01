@@ -6,8 +6,11 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import ya.school.todoapp.data.TodoItem
+import ya.school.todoapp.domain.entity.TodoResult
 import ya.school.todoapp.domain.repository.TodoItemsRepository
 import java.util.Date
 import javax.inject.Inject
@@ -19,19 +22,25 @@ class TaskFormViewModel @Inject constructor(
     var currentText by mutableStateOf("")
     var currentImportance by mutableStateOf(TodoItem.Importance.Regular)
     var currentDate: Date? by mutableStateOf(null)
+    var snackBarMessage: String? by mutableStateOf(null)
 
     fun getItem(id: String) {
         viewModelScope.launch {
-            with(repository.getItem(id)) {
-                currentText = text
-                currentImportance = importance
-                currentDate = deadline
+            when (val result = repository.getItem(id)) {
+                is TodoResult.Success -> with(result.data) {
+                    currentText = text
+                    currentImportance = importance
+                    currentDate = deadline
+                }
+                is TodoResult.Error<*> -> {
+                    processError(result.message)
+                }
             }
         }
     }
 
-    fun saveItem(id: String?) {
-        viewModelScope.launch {
+    suspend fun saveItem(id: String?): Boolean {
+        val result = viewModelScope.async {
             if (id == null) {
                 repository.addItem(
                     text = currentText,
@@ -46,13 +55,34 @@ class TaskFormViewModel @Inject constructor(
                     deadline = currentDate
                 )
             }
-        }
+        }.await() // Требование: отменять всю background work при уходе с экрана - но нам нужно доделать сохранение
+        return processEmptyResult(result)
     }
 
-    fun removeItem(id: String) {
-        viewModelScope.launch {
+    suspend fun removeItem(id: String): Boolean {
+        val result = viewModelScope.async {
             repository.removeItem(id)
+        }.await()
+        return processEmptyResult(result)
+    }
+
+    private fun processEmptyResult(result: TodoResult<Unit>): Boolean {
+        return when (result) {
+            is TodoResult.Success -> {
+                true
+            }
+            is TodoResult.Error<*> -> {
+                processError(result.message)
+                false
+            }
         }
     }
 
+    fun finish() {
+        viewModelScope.cancel()
+    }
+
+    private fun processError(message: String) {
+        snackBarMessage = message
+    }
 }
