@@ -9,20 +9,23 @@ import ya.school.todoapp.domain.repository.TodoItemsRepository
 import javax.inject.Inject
 
 /**
- * Последовательность действий при попытке получить все элементы
+ * Последовательность действий при попытке удалить элемент
  */
-class GetAllItemsUseCase @Inject constructor(
+class RemoveItemUseCase @Inject constructor(
     private val networkRepository: NetworkRepository,
     private val datastoreRepository: DatastoreRepository,
     private val todoItemsRepository: TodoItemsRepository
 ) {
-    suspend operator fun invoke(): TodoResult<Flow<List<TodoItem>>> {
-        when (val result = networkRepository.getAllItems()) {
+    suspend operator fun invoke(id: String): TodoResult<TodoItem> {
+        when (val result = todoItemsRepository.removeItem(id)) {
             is TodoResult.Error -> return TodoResult.Error(result.message)
             is TodoResult.Success -> {
-                datastoreRepository.setRevision(result.data.revision)
-                todoItemsRepository.updateAllItems(result.data.list)
-                return todoItemsRepository.getItems()
+                val revision = datastoreRepository.getRevision()
+                val item = result.data.copy(revision = revision)
+                val backendResponse = networkRepository.removeItem(id)
+                if (backendResponse is TodoResult.Success)
+                    datastoreRepository.setRevision(result.data.revision)
+                return backendResponse
             }
         }
     }

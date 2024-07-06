@@ -17,18 +17,18 @@ interface TodoItemsRepository {
         text: String,
         importance: TodoItem.Importance,
         deadline: Date?
-    ): TodoResult<Unit>
+    ): TodoResult<TodoItem>
 
-    suspend fun changeCompletionStatus(id: String, complete: Boolean): TodoResult<Unit>
+    suspend fun changeCompletionStatus(id: String, complete: Boolean): TodoResult<TodoItem>
 
-    suspend fun removeItem(id: String): TodoResult<Unit>
+    suspend fun removeItem(id: String): TodoResult<TodoItem>
 
     suspend fun changeItem(
         id: String,
         text: String,
         importance: TodoItem.Importance,
         deadline: Date?
-    ): TodoResult<Unit>
+    ): TodoResult<TodoItem>
 
     suspend fun getItem(id: String): TodoResult<TodoItem>
 }

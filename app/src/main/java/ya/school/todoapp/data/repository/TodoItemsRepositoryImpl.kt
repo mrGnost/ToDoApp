@@ -29,18 +29,18 @@ class TodoItemsRepositoryImpl @Inject constructor(
         text: String,
         importance: TodoItem.Importance,
         deadline: Date?
-    ): TodoResult<Unit> = withContext(Dispatchers.IO) {
+    ): TodoResult<TodoItem> = withContext(Dispatchers.IO) {
         dataSource.addItem(text, importance, deadline)
     }
 
     override suspend fun changeCompletionStatus(
         id: String,
         complete: Boolean
-    ): TodoResult<Unit> = withContext(Dispatchers.IO) {
+    ): TodoResult<TodoItem> = withContext(Dispatchers.IO) {
         dataSource.changeCheckedStatus(id, complete)
     }
 
-    override suspend fun removeItem(id: String): TodoResult<Unit> = withContext(Dispatchers.IO) {
+    override suspend fun removeItem(id: String): TodoResult<TodoItem> = withContext(Dispatchers.IO) {
         dataSource.removeItem(id)
     }
 
@@ -49,7 +49,7 @@ class TodoItemsRepositoryImpl @Inject constructor(
         text: String,
         importance: TodoItem.Importance,
         deadline: Date?
-    ): TodoResult<Unit> = withContext(Dispatchers.IO) {
+    ): TodoResult<TodoItem> = withContext(Dispatchers.IO) {
         dataSource.changeItem(id, text, importance, deadline)
     }
 

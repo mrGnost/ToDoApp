@@ -31,7 +31,7 @@ class HomeViewModel @Inject constructor(
     var snackBarMessage: String? by mutableStateOf(null)
 
     suspend fun startItemsObservation() {
-        when (val result = getAllItemsUseCase()) {
+        when (val result = repository.getItems()) {
             is TodoResult.Success -> result.data.collect {
                 _todoItemsFlow.value = it
             }

@@ -10,13 +10,13 @@ import ya.school.todoapp.domain.entity.TodoResult
 interface NetworkRepository {
     suspend fun getAllItems(): TodoResult<TodoItemList>
 
-    suspend fun updateItems(items: TodoItemList, revision: Int): TodoResult<Unit>
+    suspend fun updateItems(items: TodoItemList, revision: Int): TodoResult<TodoItem>
 
     suspend fun getItem(id: String): TodoResult<TodoItem>
 
-    suspend fun addItem(item: TodoItem): TodoResult<Unit>
+    suspend fun addItem(item: TodoItem): TodoResult<TodoItem>
 
-    suspend fun removeItem(id: String): TodoResult<Unit>
+    suspend fun removeItem(id: String): TodoResult<TodoItem>
 
-    suspend fun changeItem(item: TodoItem): TodoResult<Unit>
+    suspend fun changeItem(item: TodoItem): TodoResult<TodoItem>
 }

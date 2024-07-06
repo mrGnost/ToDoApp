@@ -13,6 +13,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ya.school.todoapp.BuildConfig
 import ya.school.todoapp.data.network.TodoApi
+import javax.inject.Singleton
 
 /**
  * Модуль для настройки клиента для взаимодействия с API бэкенда
@@ -21,6 +22,7 @@ import ya.school.todoapp.data.network.TodoApi
 @InstallIn(SingletonComponent::class)
 class NetworkModule {
     @Provides
+    @Singleton
     fun provideRecommendationApi(
         client: OkHttpClient,
         converterFactory: Converter.Factory
@@ -32,6 +34,7 @@ class NetworkModule {
         .create(TodoApi::class.java)
 
     @Provides
+    @Singleton
     fun provideOkHttp(
         interceptors: Set<@JvmSuppressWildcards Interceptor>
     ): OkHttpClient {

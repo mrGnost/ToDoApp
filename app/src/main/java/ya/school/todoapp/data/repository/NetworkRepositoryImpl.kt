@@ -31,7 +31,7 @@ class NetworkRepositoryImpl @Inject constructor(
     override suspend fun updateItems(
         items: TodoItemList,
         revision: Int
-    ): TodoResult<Unit> = withContext(Dispatchers.IO) {
+    ): TodoResult<TodoItem> = withContext(Dispatchers.IO) {
         NetworkUtils.getResponse(
             TodoListResponseDTO::toTodoItems
         ) {
@@ -47,7 +47,7 @@ class NetworkRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun addItem(item: TodoItem): TodoResult<Unit> = withContext(Dispatchers.IO) {
+    override suspend fun addItem(item: TodoItem): TodoResult<TodoItem> = withContext(Dispatchers.IO) {
         NetworkUtils.getResponse(
             TodoItemResponseDTO::toTodoItem
         ) {
@@ -55,7 +55,7 @@ class NetworkRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun removeItem(id: String): TodoResult<Unit> = withContext(Dispatchers.IO) {
+    override suspend fun removeItem(id: String): TodoResult<TodoItem> = withContext(Dispatchers.IO) {
         NetworkUtils.getResponse(
             TodoItemResponseDTO::toTodoItem
         ) {
@@ -63,7 +63,7 @@ class NetworkRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun changeItem(item: TodoItem): TodoResult<Unit> = withContext(Dispatchers.IO) {
+    override suspend fun changeItem(item: TodoItem): TodoResult<TodoItem> = withContext(Dispatchers.IO) {
         NetworkUtils.getResponse(
             TodoItemResponseDTO::toTodoItem
         ) {

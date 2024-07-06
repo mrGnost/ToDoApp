@@ -12,6 +12,10 @@ import kotlinx.coroutines.launch
 import ya.school.todoapp.domain.entity.TodoItem
 import ya.school.todoapp.domain.entity.TodoResult
 import ya.school.todoapp.domain.repository.TodoItemsRepository
+import ya.school.todoapp.domain.usecase.AddItemUseCase
+import ya.school.todoapp.domain.usecase.EditItemUseCase
+import ya.school.todoapp.domain.usecase.GetItemUseCase
+import ya.school.todoapp.domain.usecase.RemoveItemUseCase
 import java.util.Date
 import javax.inject.Inject
 
@@ -20,7 +24,11 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class TaskFormViewModel @Inject constructor(
-    val repository: TodoItemsRepository
+    private val repository: TodoItemsRepository,
+    private val addItemUseCase: AddItemUseCase,
+    private val removeItemUseCase: RemoveItemUseCase,
+    private val editItemUseCase: EditItemUseCase,
+    private val getItemUseCase: GetItemUseCase
 ) : ViewModel() {
     var currentText by mutableStateOf("")
     var currentImportance by mutableStateOf(TodoItem.Importance.Regular)
@@ -69,7 +77,7 @@ class TaskFormViewModel @Inject constructor(
         return processEmptyResult(result)
     }
 
-    private fun processEmptyResult(result: TodoResult<Unit>): Boolean {
+    private fun processEmptyResult(result: TodoResult<TodoItem>): Boolean {
         return when (result) {
             is TodoResult.Success -> {
                 true

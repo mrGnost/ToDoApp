@@ -8,6 +8,7 @@ import ya.school.todoapp.domain.entity.TodoItem
 import ya.school.todoapp.domain.entity.TodoResult
 import java.util.Date
 import java.util.Random
+import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -16,10 +17,9 @@ import javax.inject.Singleton
  */
 @Singleton
 class TodoItemsSource @Inject constructor() {
-    private var nextId = 0
     private val items = (1..30).map {
         TodoItem(
-            id = "${nextId++}",
+            id = UUID.randomUUID().toString(),
             createdAt = Date(202020),
             importance =
             when (it % 3) {
@@ -58,7 +58,7 @@ class TodoItemsSource @Inject constructor() {
         deadline: Date?
     ) = withLock {
         val newItem = TodoItem(
-            id = "${nextId++}",
+            id = UUID.randomUUID().toString(),
             text = text,
             importance = importance,
             deadline = deadline,
@@ -72,7 +72,7 @@ class TodoItemsSource @Inject constructor() {
                     add(newItem)
                 }
             )
-            TodoResult.Success(Unit)
+            TodoResult.Success(newItem)
         } catch (e: RuntimeException) {
             TodoResult.Error("Не удалось добавить элемент")
         }
@@ -80,14 +80,13 @@ class TodoItemsSource @Inject constructor() {
 
     suspend fun removeItem(itemId: String) = withLock {
         try {
+            val item = items[items.indexOfFirst { it.id == itemId }]
             _itemsFlow.emit(
                 items.apply {
-                    removeAt(
-                        indexOfFirst { it.id == itemId }
-                    )
+                    remove(item)
                 }
             )
-            TodoResult.Success(Unit)
+            TodoResult.Success(item)
         } catch (e: RuntimeException) {
             TodoResult.Error("Не удалось удалить элемент")
         }
@@ -100,6 +99,7 @@ class TodoItemsSource @Inject constructor() {
         deadline: Date?
     ) = withLock {
         try {
+            val item = items[items.indexOfFirst { it.id == itemId }]
             _itemsFlow.emit(
                 items.apply {
                     val index = indexOfFirst { it.id == itemId }
@@ -110,7 +110,7 @@ class TodoItemsSource @Inject constructor() {
                     )
                 }
             )
-            TodoResult.Success(Unit)
+            TodoResult.Success(item)
         } catch (e: RuntimeException) {
             TodoResult.Error("Не удалось внести изменения")
         }
@@ -121,6 +121,7 @@ class TodoItemsSource @Inject constructor() {
         isDone: Boolean
     ) = withLock {
         try {
+            val item = items[items.indexOfFirst { it.id == itemId }]
             _itemsFlow.emit(
                 items.apply {
                     val index = indexOfFirst { it.id == itemId }
@@ -129,7 +130,7 @@ class TodoItemsSource @Inject constructor() {
                     )
                 }
             )
-            TodoResult.Success(Unit)
+            TodoResult.Success(item)
         } catch (e: RuntimeException) {
             TodoResult.Error("Не удалось изменить статус задачи")
         }

@@ -10,6 +10,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okio.Path.Companion.toPath
+import javax.inject.Singleton
 
 /**
  * Модуль для настройки датастора для хранения текущей ревизии
@@ -18,6 +19,7 @@ import okio.Path.Companion.toPath
 @InstallIn(SingletonComponent::class)
 class DatastoreModule {
     @Provides
+    @Singleton
     fun getDatastore(@ApplicationContext context: Context): DataStore<Preferences> =
         PreferenceDataStoreFactory.createWithPath(
             corruptionHandler = null,
