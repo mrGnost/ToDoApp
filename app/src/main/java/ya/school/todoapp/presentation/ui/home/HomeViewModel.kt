@@ -10,7 +10,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import ya.school.todoapp.data.TodoItem
+import ya.school.todoapp.domain.entity.TodoItem
 import ya.school.todoapp.domain.entity.TodoResult
 import ya.school.todoapp.domain.repository.TodoItemsRepository
 import javax.inject.Inject

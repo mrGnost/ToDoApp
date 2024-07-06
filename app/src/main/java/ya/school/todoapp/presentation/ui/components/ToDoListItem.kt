@@ -24,7 +24,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ya.school.todoapp.R
-import ya.school.todoapp.data.TodoItem
+import ya.school.todoapp.domain.entity.TodoItem
 import ya.school.todoapp.presentation.ui.theme.AppTheme
 import ya.school.todoapp.presentation.ui.util.DateUtil.toDateString
 import java.util.Date
@@ -173,7 +173,8 @@ fun ToDoListItemPreviewImportant() {
         "элемент",
         TodoItem.Importance.Urgent,
         isDone = false,
-        createdAt = Date(0)
+        createdAt = Date(0),
+        revision = 0
     )
     ToDoListItem(item = item, onCheckedChange = {x, y -> }) {
 
@@ -188,7 +189,8 @@ fun ToDoListItemPreviewLow() {
         "элемент",
         TodoItem.Importance.Low,
         isDone = false,
-        createdAt = Date(0)
+        createdAt = Date(0),
+        revision = 0
     )
     ToDoListItem(item = item, onCheckedChange = {x, y -> }) {
 
@@ -203,7 +205,8 @@ fun ToDoListItemPreviewChecked() {
         "элемент",
         TodoItem.Importance.Regular,
         isDone = true,
-        createdAt = Date(0)
+        createdAt = Date(0),
+        revision = 0
     )
     ToDoListItem(item = item, onCheckedChange = {x, y -> }) {
 

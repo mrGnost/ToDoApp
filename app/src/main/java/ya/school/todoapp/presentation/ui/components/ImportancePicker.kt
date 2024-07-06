@@ -23,7 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ya.school.todoapp.R
-import ya.school.todoapp.data.TodoItem
+import ya.school.todoapp.domain.entity.TodoItem
 import ya.school.todoapp.presentation.ui.theme.AppTheme
 
 @Composable

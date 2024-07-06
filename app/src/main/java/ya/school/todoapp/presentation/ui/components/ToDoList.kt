@@ -31,7 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
-import ya.school.todoapp.data.TodoItem
+import ya.school.todoapp.domain.entity.TodoItem
 import ya.school.todoapp.presentation.ui.theme.AppTheme
 
 @OptIn(ExperimentalFoundationApi::class)

@@ -1,4 +1,4 @@
-package ya.school.todoapp.data
+package ya.school.todoapp.domain.entity
 
 import java.util.Date
 
@@ -9,7 +9,8 @@ data class TodoItem(
     val deadline: Date? = null,
     val isDone: Boolean,
     val createdAt: Date,
-    val changedAt: Date? = null
+    val changedAt: Date? = null,
+    val revision: Int
 ) {
     enum class Importance {
         Low,

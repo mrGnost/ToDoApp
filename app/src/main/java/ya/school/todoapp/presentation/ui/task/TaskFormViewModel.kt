@@ -9,7 +9,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
-import ya.school.todoapp.data.TodoItem
+import ya.school.todoapp.domain.entity.TodoItem
 import ya.school.todoapp.domain.entity.TodoResult
 import ya.school.todoapp.domain.repository.TodoItemsRepository
 import java.util.Date

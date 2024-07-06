@@ -4,7 +4,9 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import ya.school.todoapp.data.TodoItemsRepositoryImpl
+import ya.school.todoapp.data.repository.NetworkRepositoryImpl
+import ya.school.todoapp.data.repository.TodoItemsRepositoryImpl
+import ya.school.todoapp.domain.repository.NetworkRepository
 import ya.school.todoapp.domain.repository.TodoItemsRepository
 
 @Module
@@ -12,4 +14,7 @@ import ya.school.todoapp.domain.repository.TodoItemsRepository
 interface BindsModule {
     @Binds
     fun bindTodoRepository(repository: TodoItemsRepositoryImpl): TodoItemsRepository
+
+    @Binds
+    fun bindNetworkRepository(repository: NetworkRepositoryImpl): NetworkRepository
 }

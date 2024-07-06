@@ -4,6 +4,7 @@ import androidx.compose.runtime.toMutableStateList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.sync.Mutex
+import ya.school.todoapp.domain.entity.TodoItem
 import ya.school.todoapp.domain.entity.TodoResult
 import java.util.Date
 import java.util.Random
@@ -24,7 +25,8 @@ class TodoItemsSource @Inject constructor() {
                 else -> TodoItem.Importance.Regular
             },
             isDone = it % 4 == 0,
-            text = (1..Random().nextInt() % 15).map { "Задача" }.joinToString()
+            text = (1..Random().nextInt() % 15).map { "Задача" }.joinToString(),
+            revision = 0
         )
     }.toMutableStateList()
 
@@ -45,7 +47,8 @@ class TodoItemsSource @Inject constructor() {
             importance = importance,
             deadline = deadline,
             isDone = false,
-            createdAt = Date()
+            createdAt = Date(),
+            revision = 0
         )
         try {
             _itemsFlow.emit(

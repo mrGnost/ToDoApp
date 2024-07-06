@@ -1,7 +1,7 @@
 package ya.school.todoapp.domain.repository
 
 import kotlinx.coroutines.flow.Flow
-import ya.school.todoapp.data.TodoItem
+import ya.school.todoapp.domain.entity.TodoItem
 import ya.school.todoapp.domain.entity.TodoResult
 import java.util.Date
 

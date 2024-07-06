@@ -6,9 +6,10 @@
     <string name="remove">Удалить</string>
     <string name="importance">Важность</string>
     <string name="do_before">Сделать до</string>
-    <string name="text_hint">Что надо сделать...</string>
+    <string name="text_hint">Что надо сделать…</string>
     <string name="my_tasks">Мои дела</string>
     <string name="importance_low">Низкий</string>
     <string name="importance_none">Нет</string>
     <string name="importance_high">Высокий</string>
+    <string name="backend_error">Не удалось связаться с сервером</string>
 </resources>
