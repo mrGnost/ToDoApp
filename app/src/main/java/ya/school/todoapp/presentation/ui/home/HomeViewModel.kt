@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 import ya.school.todoapp.domain.entity.TodoItem
 import ya.school.todoapp.domain.entity.TodoResult
 import ya.school.todoapp.domain.repository.TodoItemsRepository
+import ya.school.todoapp.domain.usecase.ChangeCompletionUseCase
 import ya.school.todoapp.domain.usecase.GetAllItemsUseCase
 import javax.inject.Inject
 
@@ -22,7 +23,8 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     val repository: TodoItemsRepository,
-    val getAllItemsUseCase: GetAllItemsUseCase
+    val getAllItemsUseCase: GetAllItemsUseCase,
+    val changeCompletionUseCase: ChangeCompletionUseCase
 ) : ViewModel() {
     val _todoItemsFlow = MutableStateFlow<List<TodoItem>>(emptyList())
     val todoItemsFlow: Flow<List<TodoItem>>
@@ -52,7 +54,7 @@ class HomeViewModel @Inject constructor(
 
     fun changeItemCheck(id: String, newValue: Boolean) {
         viewModelScope.launch {
-            val result = repository.changeCompletionStatus(id, newValue)
+            val result = changeCompletionUseCase(id, newValue)
             if (result is TodoResult.Error<*>) {
                 processError(result.message)
             }
