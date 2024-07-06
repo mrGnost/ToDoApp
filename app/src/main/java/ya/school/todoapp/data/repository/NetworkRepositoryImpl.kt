@@ -51,15 +51,16 @@ class NetworkRepositoryImpl @Inject constructor(
         NetworkUtils.getResponse(
             TodoItemResponseDTO::toTodoItem
         ) {
-            api.addItem(item.revision, TodoItemRequestDTO.fromTodoItem(item))
+            val r = api.addItem(item.revision, TodoItemRequestDTO.fromTodoItem(item))
+            r
         }
     }
 
-    override suspend fun removeItem(id: String): TodoResult<TodoItem> = withContext(Dispatchers.IO) {
+    override suspend fun removeItem(id: String, revision: Int): TodoResult<TodoItem> = withContext(Dispatchers.IO) {
         NetworkUtils.getResponse(
             TodoItemResponseDTO::toTodoItem
         ) {
-            api.deleteItem(id)
+            api.deleteItem(revision, id)
         }
     }
 
@@ -67,7 +68,7 @@ class NetworkRepositoryImpl @Inject constructor(
         NetworkUtils.getResponse(
             TodoItemResponseDTO::toTodoItem
         ) {
-            api.changeItem(item.id, TodoItemRequestDTO.fromTodoItem(item))
+            api.changeItem(item.revision, item.id, TodoItemRequestDTO.fromTodoItem(item))
         }
     }
 }

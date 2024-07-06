@@ -11,7 +11,6 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import ya.school.todoapp.domain.entity.TodoItem
 import ya.school.todoapp.domain.entity.TodoResult
-import ya.school.todoapp.domain.repository.TodoItemsRepository
 import ya.school.todoapp.domain.usecase.AddItemUseCase
 import ya.school.todoapp.domain.usecase.EditItemUseCase
 import ya.school.todoapp.domain.usecase.GetItemUseCase
@@ -24,7 +23,6 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class TaskFormViewModel @Inject constructor(
-    private val repository: TodoItemsRepository,
     private val addItemUseCase: AddItemUseCase,
     private val removeItemUseCase: RemoveItemUseCase,
     private val editItemUseCase: EditItemUseCase,
@@ -37,7 +35,7 @@ class TaskFormViewModel @Inject constructor(
 
     fun getItem(id: String) {
         viewModelScope.launch {
-            when (val result = repository.getItem(id)) {
+            when (val result = getItemUseCase(id)) {
                 is TodoResult.Success -> with(result.data) {
                     currentText = text
                     currentImportance = importance
@@ -53,13 +51,13 @@ class TaskFormViewModel @Inject constructor(
     suspend fun saveItem(id: String?): Boolean {
         val result = viewModelScope.async {
             if (id == null) {
-                repository.addItem(
+                addItemUseCase(
                     text = currentText,
                     importance = currentImportance,
                     deadline = currentDate
                 )
             } else {
-                repository.changeItem(
+                editItemUseCase(
                     id = id,
                     text = currentText,
                     importance = currentImportance,
@@ -72,7 +70,7 @@ class TaskFormViewModel @Inject constructor(
 
     suspend fun removeItem(id: String): Boolean {
         val result = viewModelScope.async {
-            repository.removeItem(id)
+            removeItemUseCase(id)
         }.await()
         return processEmptyResult(result)
     }

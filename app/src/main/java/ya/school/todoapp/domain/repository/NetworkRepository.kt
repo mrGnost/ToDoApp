@@ -16,7 +16,7 @@ interface NetworkRepository {
 
     suspend fun addItem(item: TodoItem): TodoResult<TodoItem>
 
-    suspend fun removeItem(id: String): TodoResult<TodoItem>
+    suspend fun removeItem(id: String, revision: Int): TodoResult<TodoItem>
 
     suspend fun changeItem(item: TodoItem): TodoResult<TodoItem>
 }

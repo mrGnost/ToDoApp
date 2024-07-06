@@ -1,6 +1,5 @@
 package ya.school.todoapp.domain.usecase
 
-import kotlinx.coroutines.flow.Flow
 import ya.school.todoapp.domain.entity.TodoItem
 import ya.school.todoapp.domain.entity.TodoResult
 import ya.school.todoapp.domain.repository.DatastoreRepository
@@ -21,8 +20,7 @@ class RemoveItemUseCase @Inject constructor(
             is TodoResult.Error -> return TodoResult.Error(result.message)
             is TodoResult.Success -> {
                 val revision = datastoreRepository.getRevision()
-                val item = result.data.copy(revision = revision)
-                val backendResponse = networkRepository.removeItem(id)
+                val backendResponse = networkRepository.removeItem(id, revision)
                 if (backendResponse is TodoResult.Success)
                     datastoreRepository.setRevision(result.data.revision)
                 return backendResponse

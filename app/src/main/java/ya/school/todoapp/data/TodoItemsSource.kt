@@ -99,7 +99,6 @@ class TodoItemsSource @Inject constructor() {
         deadline: Date?
     ) = withLock {
         try {
-            val item = items[items.indexOfFirst { it.id == itemId }]
             _itemsFlow.emit(
                 items.apply {
                     val index = indexOfFirst { it.id == itemId }
@@ -110,6 +109,7 @@ class TodoItemsSource @Inject constructor() {
                     )
                 }
             )
+            val item = items[items.indexOfFirst { it.id == itemId }]
             TodoResult.Success(item)
         } catch (e: RuntimeException) {
             TodoResult.Error("Не удалось внести изменения")
@@ -121,7 +121,6 @@ class TodoItemsSource @Inject constructor() {
         isDone: Boolean
     ) = withLock {
         try {
-            val item = items[items.indexOfFirst { it.id == itemId }]
             _itemsFlow.emit(
                 items.apply {
                     val index = indexOfFirst { it.id == itemId }
@@ -130,6 +129,7 @@ class TodoItemsSource @Inject constructor() {
                     )
                 }
             )
+            val item = items[items.indexOfFirst { it.id == itemId }]
             TodoResult.Success(item)
         } catch (e: RuntimeException) {
             TodoResult.Error("Не удалось изменить статус задачи")

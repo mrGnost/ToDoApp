@@ -38,10 +38,14 @@ interface TodoApi {
 
     @PUT("list/{id}")
     suspend fun changeItem(
+        @Header("X-Last-Known-Revision") revision: Int,
         @Path("id") id: String,
         @Body item: TodoItemRequestDTO
     ): Response<TodoItemResponseDTO>
 
     @DELETE("list/{id}")
-    suspend fun deleteItem(@Path("id") id: String): Response<TodoItemResponseDTO>
+    suspend fun deleteItem(
+        @Header("X-Last-Known-Revision") revision: Int,
+        @Path("id") id: String
+    ): Response<TodoItemResponseDTO>
 }

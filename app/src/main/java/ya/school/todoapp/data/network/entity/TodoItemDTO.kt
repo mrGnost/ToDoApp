@@ -19,7 +19,7 @@ data class TodoItemDTO(
     @SerializedName("changed_at")
     val changedAt: Long,
     @SerializedName("last_updated_by")
-    val lastUpdatedBy: Int
+    val lastUpdatedBy: String
 ) {
     fun toTodoItem(revision: Int): TodoItem {
         return TodoItem(
@@ -52,7 +52,7 @@ data class TodoItemDTO(
                 done = item.isDone,
                 createdAt = item.createdAt.time,
                 changedAt = item.changedAt?.time ?: item.createdAt.time,
-                lastUpdatedBy = 0
+                lastUpdatedBy = "1"
             )
         }
     }
