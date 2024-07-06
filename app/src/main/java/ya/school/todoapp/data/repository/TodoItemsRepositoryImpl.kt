@@ -20,6 +20,11 @@ class TodoItemsRepositoryImpl @Inject constructor(
         return dataSource.itemsFlow
     }
 
+    override suspend fun updateAllItems(items: List<TodoItem>): TodoResult<Unit> =
+        withContext(Dispatchers.IO) {
+            dataSource.updateItems(items)
+        }
+
     override suspend fun addItem(
         text: String,
         importance: TodoItem.Importance,

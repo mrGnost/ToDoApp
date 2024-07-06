@@ -39,6 +39,19 @@ class TodoItemsSource @Inject constructor() {
     val itemsFlow: TodoResult<Flow<List<TodoItem>>>
         get() = TodoResult.Success(_itemsFlow)
 
+    suspend fun updateItems(
+        items: List<TodoItem>
+    ) = withLock {
+        try {
+            this.items.removeAll { true }
+            this.items.addAll(items)
+            _itemsFlow.emit(this.items)
+            TodoResult.Success(Unit)
+        } catch (e: RuntimeException) {
+            TodoResult.Error("Не удалось обновить элементы")
+        }
+    }
+
     suspend fun addItem(
         text: String,
         importance: TodoItem.Importance,

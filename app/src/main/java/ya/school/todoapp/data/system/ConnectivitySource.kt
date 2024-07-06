@@ -2,6 +2,7 @@ package ya.school.todoapp.data.system
 
 import android.net.ConnectivityManager
 import android.net.Network
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import javax.inject.Inject
@@ -29,5 +30,6 @@ class ConnectivitySource @Inject constructor() {
                 trySend(false)
             }
         }
+        awaitClose { }
     }
 }

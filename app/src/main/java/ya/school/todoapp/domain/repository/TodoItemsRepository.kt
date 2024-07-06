@@ -11,6 +11,8 @@ import java.util.Date
 interface TodoItemsRepository {
     fun getItems(): TodoResult<Flow<List<TodoItem>>>
 
+    suspend fun updateAllItems(items: List<TodoItem>): TodoResult<Unit>
+
     suspend fun addItem(
         text: String,
         importance: TodoItem.Importance,

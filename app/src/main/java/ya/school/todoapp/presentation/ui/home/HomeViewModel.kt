@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 import ya.school.todoapp.domain.entity.TodoItem
 import ya.school.todoapp.domain.entity.TodoResult
 import ya.school.todoapp.domain.repository.TodoItemsRepository
+import ya.school.todoapp.domain.usecase.GetAllItemsUseCase
 import javax.inject.Inject
 
 /**
@@ -20,7 +21,8 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    val repository: TodoItemsRepository
+    val repository: TodoItemsRepository,
+    val getAllItemsUseCase: GetAllItemsUseCase
 ) : ViewModel() {
     val _todoItemsFlow = MutableStateFlow<List<TodoItem>>(emptyList())
     val todoItemsFlow: Flow<List<TodoItem>>
@@ -29,7 +31,7 @@ class HomeViewModel @Inject constructor(
     var snackBarMessage: String? by mutableStateOf(null)
 
     suspend fun startItemsObservation() {
-        when (val result = repository.getItems()) {
+        when (val result = getAllItemsUseCase()) {
             is TodoResult.Success -> result.data.collect {
                 _todoItemsFlow.value = it
             }

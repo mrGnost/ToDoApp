@@ -61,7 +61,7 @@ class NetworkModule {
     fun provideAuthInterceptor(): Interceptor = Interceptor { chain ->
         val request = chain.request()
         val newRequest = request.newBuilder()
-            .addHeader("Bearer", AUTH_TOKEN)
+            .addHeader("Authorization", "Bearer $AUTH_TOKEN")
             .build()
         chain.proceed(newRequest)
     }

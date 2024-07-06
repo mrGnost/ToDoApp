@@ -5,6 +5,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import dagger.Module
+import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
@@ -16,6 +17,7 @@ import okio.Path.Companion.toPath
 @Module
 @InstallIn(SingletonComponent::class)
 class DatastoreModule {
+    @Provides
     fun getDatastore(@ApplicationContext context: Context): DataStore<Preferences> =
         PreferenceDataStoreFactory.createWithPath(
             corruptionHandler = null,

@@ -3,12 +3,13 @@ package ya.school.todoapp.data.repository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import ya.school.todoapp.data.network.NetworkUtils
-import ya.school.todoapp.domain.entity.TodoItem
 import ya.school.todoapp.data.network.TodoApi
 import ya.school.todoapp.data.network.entity.TodoItemRequestDTO
 import ya.school.todoapp.data.network.entity.TodoItemResponseDTO
 import ya.school.todoapp.data.network.entity.TodoListRequestDTO
 import ya.school.todoapp.data.network.entity.TodoListResponseDTO
+import ya.school.todoapp.domain.entity.TodoItem
+import ya.school.todoapp.domain.entity.TodoItemList
 import ya.school.todoapp.domain.entity.TodoResult
 import ya.school.todoapp.domain.repository.NetworkRepository
 import javax.inject.Inject
@@ -19,7 +20,7 @@ import javax.inject.Inject
 class NetworkRepositoryImpl @Inject constructor(
     private val api: TodoApi
 ) : NetworkRepository {
-    override suspend fun getAllItems(): TodoResult<List<TodoItem>> = withContext(Dispatchers.IO) {
+    override suspend fun getAllItems(): TodoResult<TodoItemList> = withContext(Dispatchers.IO) {
         NetworkUtils.getResponse(
             TodoListResponseDTO::toTodoItems
         ) {
@@ -28,7 +29,7 @@ class NetworkRepositoryImpl @Inject constructor(
     }
 
     override suspend fun updateItems(
-        items: List<TodoItem>,
+        items: TodoItemList,
         revision: Int
     ): TodoResult<Unit> = withContext(Dispatchers.IO) {
         NetworkUtils.getResponse(
