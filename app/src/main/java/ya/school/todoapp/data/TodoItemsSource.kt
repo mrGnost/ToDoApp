@@ -1,13 +1,12 @@
 package ya.school.todoapp.data
 
-import androidx.compose.runtime.toMutableStateList
+import androidx.compose.runtime.mutableStateListOf
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.sync.Mutex
 import ya.school.todoapp.domain.entity.TodoItem
 import ya.school.todoapp.domain.entity.TodoResult
 import java.util.Date
-import java.util.Random
 import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -17,21 +16,7 @@ import javax.inject.Singleton
  */
 @Singleton
 class TodoItemsSource @Inject constructor() {
-    private val items = (1..30).map {
-        TodoItem(
-            id = UUID.randomUUID().toString(),
-            createdAt = Date(202020),
-            importance =
-            when (it % 3) {
-                0 -> TodoItem.Importance.Urgent
-                1 -> TodoItem.Importance.Low
-                else -> TodoItem.Importance.Regular
-            },
-            isDone = it % 4 == 0,
-            text = (1..Random().nextInt() % 15).map { "Задача" }.joinToString(),
-            revision = 0
-        )
-    }.toMutableStateList()
+    private val items = mutableStateListOf<TodoItem>()
 
     private val _itemsFlow = MutableStateFlow<List<TodoItem>>(items)
     private val mutex = Mutex()

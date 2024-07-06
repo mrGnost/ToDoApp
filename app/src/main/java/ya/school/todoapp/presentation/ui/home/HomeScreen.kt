@@ -106,9 +106,6 @@ fun HomeScreen(navigator: ToDoNavigation) {
                     onCompleteChange = { id, value ->
                         viewModel.changeItemCheck(id, value)
                     },
-                    onDelete = { id ->
-                        viewModel.removeItem(id)
-                    },
                     onPickItem = { id ->
                         navigator.navigateToTask(id)
                         viewModel.finish()

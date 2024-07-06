@@ -43,15 +43,6 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun removeItem(id: String) {
-        viewModelScope.launch {
-            val result = repository.removeItem(id)
-            if (result is TodoResult.Error<*>) {
-                processError(result.message)
-            }
-        }
-    }
-
     fun changeItemCheck(id: String, newValue: Boolean) {
         viewModelScope.launch {
             val result = changeCompletionUseCase(id, newValue)
