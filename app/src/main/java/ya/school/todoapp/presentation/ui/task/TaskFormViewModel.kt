@@ -15,6 +15,9 @@ import ya.school.todoapp.domain.repository.TodoItemsRepository
 import java.util.Date
 import javax.inject.Inject
 
+/**
+ * Вьюмодель экрана с формой редактирования задачи
+ */
 @HiltViewModel
 class TaskFormViewModel @Inject constructor(
     val repository: TodoItemsRepository

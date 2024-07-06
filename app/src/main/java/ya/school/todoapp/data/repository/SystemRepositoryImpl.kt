@@ -5,6 +5,9 @@ import ya.school.todoapp.data.system.ConnectivitySource
 import ya.school.todoapp.domain.repository.SystemRepository
 import javax.inject.Inject
 
+/**
+ * Реализация репозитория, отвечающего за мониторинг состояния аспектов системы
+ */
 class SystemRepositoryImpl @Inject constructor(
     private val source: ConnectivitySource
 ) : SystemRepository {

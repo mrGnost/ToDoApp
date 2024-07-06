@@ -8,6 +8,9 @@ import ya.school.todoapp.domain.repository.NetworkRepository
 import ya.school.todoapp.domain.repository.SystemRepository
 import javax.inject.Inject
 
+/**
+ * Вьюмодель главной активности
+ */
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val networkRepository: NetworkRepository,

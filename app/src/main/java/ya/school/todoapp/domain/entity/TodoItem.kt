@@ -2,6 +2,9 @@ package ya.school.todoapp.domain.entity
 
 import java.util.Date
 
+/**
+ * Дата класс, описывающий задачу
+ */
 data class TodoItem(
     val id: String,
     val text: String,

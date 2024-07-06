@@ -11,6 +11,9 @@ import java.util.Random
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/**
+ * Класс, отвечающий за доступ к замоканным данным о задачах
+ */
 @Singleton
 class TodoItemsSource @Inject constructor() {
     private var nextId = 0

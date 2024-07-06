@@ -15,6 +15,9 @@ import ya.school.todoapp.domain.entity.TodoResult
 import ya.school.todoapp.domain.repository.TodoItemsRepository
 import javax.inject.Inject
 
+/**
+ * Вьюмодель главного экрана со списком задач
+ */
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     val repository: TodoItemsRepository

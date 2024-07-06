@@ -5,7 +5,9 @@ import ya.school.todoapp.domain.entity.TodoItem
 import ya.school.todoapp.domain.entity.TodoResult
 import java.util.Date
 
-// Замоканные данные, так что ошибок нет - изменю, когда будем подключать сеть
+/**
+ * Интерфейс репозитория, отвечающего за взаимодействие с локальным хранилищем задач
+ */
 interface TodoItemsRepository {
     fun getItems(): TodoResult<Flow<List<TodoItem>>>
 

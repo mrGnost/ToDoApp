@@ -11,6 +11,9 @@ import ya.school.todoapp.domain.repository.NetworkRepository
 import ya.school.todoapp.domain.repository.SystemRepository
 import ya.school.todoapp.domain.repository.TodoItemsRepository
 
+/**
+ * Модуль, связывающий интерфейсы репозиториев с их реализациями
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 interface BindsModule {

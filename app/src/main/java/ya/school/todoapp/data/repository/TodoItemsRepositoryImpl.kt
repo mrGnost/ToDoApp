@@ -10,6 +10,9 @@ import ya.school.todoapp.domain.repository.TodoItemsRepository
 import java.util.Date
 import javax.inject.Inject
 
+/**
+ * Имплементация репозитория, отвечающего за взаимодействие с локальным хранилищем задач
+ */
 class TodoItemsRepositoryImpl @Inject constructor(
     private val dataSource: TodoItemsSource
 ) : TodoItemsRepository {

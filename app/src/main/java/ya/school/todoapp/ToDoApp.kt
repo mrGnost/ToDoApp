@@ -6,6 +6,9 @@ import androidx.work.Configuration
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 
+/**
+ * Класс приложения
+ */
 @HiltAndroidApp
 class ToDoApp : Application(), Configuration.Provider {
 

@@ -17,6 +17,9 @@ import ya.school.todoapp.presentation.ui.home.HomeScreen
 import ya.school.todoapp.presentation.ui.task.TaskFormScreen
 import ya.school.todoapp.presentation.ui.theme.ToDoAppTheme
 
+/**
+ * Главная активити приложения (и пока единственная)
+ */
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private lateinit var navigator: ToDoNavigation

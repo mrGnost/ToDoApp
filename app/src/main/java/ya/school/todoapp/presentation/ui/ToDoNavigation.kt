@@ -2,6 +2,9 @@ package ya.school.todoapp.presentation.ui
 
 import androidx.navigation.NavHostController
 
+/**
+ * Класс, отвечающий за навигацию между экранами
+ */
 class ToDoNavigation(val navController: NavHostController) {
     fun navigateToHome() =
         navController.navigate(HOME_ROUTE) {
