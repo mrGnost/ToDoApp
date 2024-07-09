@@ -1,32 +1,22 @@
 package ya.school.todoapp.data
 
-import androidx.compose.runtime.toMutableStateList
+import androidx.compose.runtime.mutableStateListOf
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.sync.Mutex
+import ya.school.todoapp.domain.entity.TodoItem
 import ya.school.todoapp.domain.entity.TodoResult
 import java.util.Date
-import java.util.Random
+import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/**
+ * Класс, отвечающий за доступ к замоканным данным о задачах
+ */
 @Singleton
 class TodoItemsSource @Inject constructor() {
-    private var nextId = 0
-    private val items = (1..30).map {
-        TodoItem(
-            id = "${nextId++}",
-            createdAt = Date(202020),
-            importance =
-            when (it % 3) {
-                0 -> TodoItem.Importance.Urgent
-                1 -> TodoItem.Importance.Low
-                else -> TodoItem.Importance.Regular
-            },
-            isDone = it % 4 == 0,
-            text = (1..Random().nextInt() % 15).map { "Задача" }.joinToString()
-        )
-    }.toMutableStateList()
+    private val items = mutableStateListOf<TodoItem>()
 
     private val _itemsFlow = MutableStateFlow<List<TodoItem>>(items)
     private val mutex = Mutex()
@@ -34,18 +24,32 @@ class TodoItemsSource @Inject constructor() {
     val itemsFlow: TodoResult<Flow<List<TodoItem>>>
         get() = TodoResult.Success(_itemsFlow)
 
+    suspend fun updateItems(
+        items: List<TodoItem>
+    ) = withLock {
+        try {
+            this.items.removeAll { true }
+            this.items.addAll(items)
+            _itemsFlow.emit(this.items)
+            TodoResult.Success(Unit)
+        } catch (e: RuntimeException) {
+            TodoResult.Error("Не удалось обновить элементы")
+        }
+    }
+
     suspend fun addItem(
         text: String,
         importance: TodoItem.Importance,
         deadline: Date?
     ) = withLock {
         val newItem = TodoItem(
-            id = "${nextId++}",
+            id = UUID.randomUUID().toString(),
             text = text,
             importance = importance,
             deadline = deadline,
             isDone = false,
-            createdAt = Date()
+            createdAt = Date(),
+            revision = 0
         )
         try {
             _itemsFlow.emit(
@@ -53,7 +57,7 @@ class TodoItemsSource @Inject constructor() {
                     add(newItem)
                 }
             )
-            TodoResult.Success(Unit)
+            TodoResult.Success(newItem)
         } catch (e: RuntimeException) {
             TodoResult.Error("Не удалось добавить элемент")
         }
@@ -61,14 +65,13 @@ class TodoItemsSource @Inject constructor() {
 
     suspend fun removeItem(itemId: String) = withLock {
         try {
+            val item = items[items.indexOfFirst { it.id == itemId }]
             _itemsFlow.emit(
                 items.apply {
-                    removeAt(
-                        indexOfFirst { it.id == itemId }
-                    )
+                    remove(item)
                 }
             )
-            TodoResult.Success(Unit)
+            TodoResult.Success(item)
         } catch (e: RuntimeException) {
             TodoResult.Error("Не удалось удалить элемент")
         }
@@ -91,7 +94,8 @@ class TodoItemsSource @Inject constructor() {
                     )
                 }
             )
-            TodoResult.Success(Unit)
+            val item = items[items.indexOfFirst { it.id == itemId }]
+            TodoResult.Success(item)
         } catch (e: RuntimeException) {
             TodoResult.Error("Не удалось внести изменения")
         }
@@ -110,7 +114,8 @@ class TodoItemsSource @Inject constructor() {
                     )
                 }
             )
-            TodoResult.Success(Unit)
+            val item = items[items.indexOfFirst { it.id == itemId }]
+            TodoResult.Success(item)
         } catch (e: RuntimeException) {
             TodoResult.Error("Не удалось изменить статус задачи")
         }

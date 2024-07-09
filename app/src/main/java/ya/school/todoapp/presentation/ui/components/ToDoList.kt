@@ -4,7 +4,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -31,14 +30,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
-import ya.school.todoapp.data.TodoItem
+import ya.school.todoapp.domain.entity.TodoItem
 import ya.school.todoapp.presentation.ui.theme.AppTheme
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ToDoListColumn(
     tasks: List<TodoItem>,
-    onDelete: (String) -> Unit,
     onCompleteChange: (String, Boolean) -> Unit,
     onPickItem: (String) -> Unit,
     modifier: Modifier = Modifier
@@ -50,17 +47,11 @@ fun ToDoListColumn(
             items = tasks,
             key = { _, item -> item.id }
         ) { _, task ->
-            SwipeContainer(
+            ToDoListItem(
                 item = task,
-                onDelete = onDelete,
-                modifier = Modifier.animateItemPlacement()
-            ) {
-                ToDoListItem(
-                    item = it,
-                    onCheckedChange = onCompleteChange,
-                    onInfoClick = onPickItem
-                )
-            }
+                onCheckedChange = onCompleteChange,
+                onInfoClick = onPickItem
+            )
         }
     }
 }
