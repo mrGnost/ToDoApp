@@ -7,7 +7,8 @@ import ya.school.todoapp.data.storage.db.entity.TodoItemEntity
 
 @Database(
     entities = [TodoItemEntity::class],
-    version = DatabaseScheme.DB_VERSION
+    version = DatabaseScheme.DB_VERSION,
+    exportSchema = false
 )
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
