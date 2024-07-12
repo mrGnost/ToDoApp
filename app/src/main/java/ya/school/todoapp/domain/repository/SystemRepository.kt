@@ -7,4 +7,6 @@ import kotlinx.coroutines.flow.Flow
  */
 interface SystemRepository {
     fun getNetworkUpdates(): Flow<Boolean>
+
+    fun getNetworkState(): Boolean
 }

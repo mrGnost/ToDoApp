@@ -37,7 +37,7 @@ class HomeViewModel @Inject constructor(
             is TodoResult.Success -> result.data.collect {
                 _todoItemsFlow.value = it
             }
-            is TodoResult.Error<*> -> {
+            is TodoResult.Error -> {
                 processError(result.message)
             }
         }
@@ -46,7 +46,7 @@ class HomeViewModel @Inject constructor(
     fun changeItemCheck(id: String, newValue: Boolean) {
         viewModelScope.launch {
             val result = changeCompletionUseCase(id, newValue)
-            if (result is TodoResult.Error<*>) {
+            if (result is TodoResult.Error) {
                 processError(result.message)
             }
         }

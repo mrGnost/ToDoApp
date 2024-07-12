@@ -173,8 +173,7 @@ fun ToDoListItemPreviewImportant() {
         "элемент",
         TodoItem.Importance.Urgent,
         isDone = false,
-        createdAt = Date(0),
-        revision = 0
+        createdAt = Date(0)
     )
     ToDoListItem(item = item, onCheckedChange = {x, y -> }) {
 
@@ -189,8 +188,7 @@ fun ToDoListItemPreviewLow() {
         "элемент",
         TodoItem.Importance.Low,
         isDone = false,
-        createdAt = Date(0),
-        revision = 0
+        createdAt = Date(0)
     )
     ToDoListItem(item = item, onCheckedChange = {x, y -> }) {
 
@@ -205,8 +203,7 @@ fun ToDoListItemPreviewChecked() {
         "элемент",
         TodoItem.Importance.Regular,
         isDone = true,
-        createdAt = Date(0),
-        revision = 0
+        createdAt = Date(0)
     )
     ToDoListItem(item = item, onCheckedChange = {x, y -> }) {
 

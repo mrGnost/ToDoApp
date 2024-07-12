@@ -12,6 +12,7 @@ import androidx.work.WorkerParameters
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import ya.school.todoapp.domain.repository.NetworkRepository
+import ya.school.todoapp.domain.usecase.UpdateItemsUseCase
 import java.util.concurrent.TimeUnit
 
 /**
@@ -19,12 +20,12 @@ import java.util.concurrent.TimeUnit
  */
 @HiltWorker
 class DBUpdatesWorker @AssistedInject constructor(
-    private val networkRepository: NetworkRepository,
+    private val updateItemsUseCase: UpdateItemsUseCase,
     @Assisted context: Context,
     @Assisted params: WorkerParameters
 ) : CoroutineWorker(context, params) {
     override suspend fun doWork(): Result {
-        val result = networkRepository.getAllItems()
+        updateItemsUseCase()
         return Result.success()
     }
 

@@ -13,6 +13,7 @@ data class TodoItemDTO(
     val importance: String,
     val deadline: Long? = null,
     val done: Boolean,
+    val files: List<String>? = null,
     val color: String? = null,
     @SerializedName("created_at")
     val createdAt: Long,
@@ -21,7 +22,7 @@ data class TodoItemDTO(
     @SerializedName("last_updated_by")
     val lastUpdatedBy: String
 ) {
-    fun toTodoItem(revision: Int): TodoItem {
+    fun toTodoItem(): TodoItem {
         return TodoItem(
             id = id,
             text = text,
@@ -32,9 +33,9 @@ data class TodoItemDTO(
             },
             deadline = deadline?.let { Date(it) },
             isDone = done,
+            files = files,
             createdAt = Date(createdAt),
-            changedAt = Date(changedAt),
-            revision = revision
+            changedAt = Date(changedAt)
         )
     }
 
@@ -50,6 +51,7 @@ data class TodoItemDTO(
                 },
                 deadline = item.deadline?.time,
                 done = item.isDone,
+                files = item.files,
                 createdAt = item.createdAt.time,
                 changedAt = item.changedAt?.time ?: item.createdAt.time,
                 lastUpdatedBy = "1"

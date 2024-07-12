@@ -1,6 +1,6 @@
 package ya.school.todoapp.domain.entity
 
-data class TodoItemList(
-    val list: List<TodoItem>,
+data class Revisioned<T>(
+    val data: T,
     val revision: Int
 )

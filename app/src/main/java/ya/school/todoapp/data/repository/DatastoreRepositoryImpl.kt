@@ -4,11 +4,13 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.longPreferencesKey
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import ya.school.todoapp.domain.repository.DatastoreRepository
+import java.util.Date
 import javax.inject.Inject
 
 /**
@@ -31,7 +33,22 @@ class DatastoreRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun getLastOnlineTimestamp() = withContext(Dispatchers.IO) {
+        datastore.data.map { preferences ->
+            Date(preferences[lastOnlineKey] ?: 0)
+        }.first()
+    }
+
+    override suspend fun setLastOnlineTimestamp(date: Date) {
+        withContext(Dispatchers.IO) {
+            datastore.edit { settings ->
+                settings[lastOnlineKey] = date.time
+            }
+        }
+    }
+
     companion object {
         val revisionKey = intPreferencesKey("revision_key")
+        val lastOnlineKey = longPreferencesKey("last_online_key")
     }
 }

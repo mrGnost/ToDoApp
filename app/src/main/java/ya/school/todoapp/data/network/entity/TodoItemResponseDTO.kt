@@ -1,5 +1,6 @@
 package ya.school.todoapp.data.network.entity
 
+import ya.school.todoapp.domain.entity.Revisioned
 import ya.school.todoapp.domain.entity.TodoItem
 
 /**
@@ -10,7 +11,10 @@ data class TodoItemResponseDTO(
     val element: TodoItemDTO,
     val revision: Int
 ) {
-    fun toTodoItem(): TodoItem {
-        return element.toTodoItem(revision)
+    fun toTodoItem(): Revisioned<TodoItem> {
+        return Revisioned(
+            data = element.toTodoItem(),
+            revision = revision
+        )
     }
 }
