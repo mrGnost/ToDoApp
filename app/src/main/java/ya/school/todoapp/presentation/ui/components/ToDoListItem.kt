@@ -175,7 +175,7 @@ fun ToDoListItemPreviewImportant() {
         isDone = false,
         createdAt = Date(0)
     )
-    ToDoListItem(item = item, onCheckedChange = {x, y -> }) {
+    ToDoListItem(item = item, onCheckedChange = { _, _ -> }) {
 
     }
 }
@@ -190,7 +190,7 @@ fun ToDoListItemPreviewLow() {
         isDone = false,
         createdAt = Date(0)
     )
-    ToDoListItem(item = item, onCheckedChange = {x, y -> }) {
+    ToDoListItem(item = item, onCheckedChange = { _, _ -> }) {
 
     }
 }
@@ -205,7 +205,7 @@ fun ToDoListItemPreviewChecked() {
         isDone = true,
         createdAt = Date(0)
     )
-    ToDoListItem(item = item, onCheckedChange = {x, y -> }) {
+    ToDoListItem(item = item, onCheckedChange = { _, _ -> }) {
 
     }
 }
