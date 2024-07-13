@@ -7,4 +7,5 @@ interface TgExtension {
     val chatId: Property<String>
     val validateSize: Property<Boolean>
     val maxSizeMb: Property<Int>
+    val writeFullReport: Property<Boolean>
 }

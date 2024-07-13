@@ -2,7 +2,6 @@ package ya.school.todoapp.plugins.telegram
 
 import com.android.build.api.artifact.SingleArtifact
 import com.android.build.api.variant.AndroidComponentsExtension
-import com.android.build.api.variant.BuildConfigField
 import com.android.build.api.variant.Variant
 import com.android.build.gradle.internal.tasks.factory.dependsOn
 import gradle.kotlin.dsl.accessors._ffe51ee91362977ddc98906f5440a003.android
@@ -27,10 +26,14 @@ class TgPlugin : Plugin<Project> {
             println("Code: ${target.android.defaultConfig.versionCode}")
             val tgReportTask = target.configureTgReportTask(ext, variant, repository)
             val apkSizeTask = target.configureApkSizeTask(ext, variant, repository)
-            tgReportTask.configure {
-                apkSizeMb.set(apkSizeTask.get().apkSizeMb)
-            }
             tgReportTask.dependsOn(apkSizeTask)
+            if (ext.writeFullReport.get()) {
+                val apkDetailTask = target.configureApkDetailTask(ext, variant, repository)
+                tgReportTask.configure {
+                    apkSizeMb.set(apkSizeTask.get().apkSizeMb)
+                }
+                apkDetailTask.dependsOn(tgReportTask)
+            }
         }
     }
 
@@ -71,6 +74,24 @@ class TgPlugin : Plugin<Project> {
                 maxSizeMb.set(extension.maxSizeMb)
                 taskEnabled.set(extension.validateSize)
                 apkSizeMb.set(File("apk_size.txt"))
+            }
+        }
+    }
+
+    private fun Project.configureApkDetailTask(
+        extension: TgExtension,
+        variant: Variant,
+        repository: TgRepository
+    ): TaskProvider<ApkDetailTask> {
+        return tasks.register(
+            "reportApkWithDetailsFor${variant.name.capitalized()}",
+            ApkDetailTask::class.java,
+            repository
+        ).apply {
+            configure {
+                apkDir.set(variant.artifacts.get(SingleArtifact.APK))
+                token.set(extension.token)
+                chatId.set(extension.chatId)
             }
         }
     }

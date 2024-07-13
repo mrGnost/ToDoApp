@@ -9,6 +9,7 @@ tg {
     chatId.set(providers.environmentVariable("TG_CHAT_ID"))
     validateSize.set(true)
     maxSizeMb.set(10)
+    writeFullReport.set(true)
 }
 
 android {
