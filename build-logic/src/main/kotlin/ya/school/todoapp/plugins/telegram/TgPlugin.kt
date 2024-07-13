@@ -2,16 +2,16 @@ package ya.school.todoapp.plugins.telegram
 
 import com.android.build.api.artifact.SingleArtifact
 import com.android.build.api.variant.AndroidComponentsExtension
-import io.ktor.client.HttpClient
-import io.ktor.client.engine.okhttp.OkHttp
-import io.ktor.client.plugins.logging.DEFAULT
-import io.ktor.client.plugins.logging.LogLevel
-import io.ktor.client.plugins.logging.Logger
-import io.ktor.client.plugins.logging.Logging
+import com.android.build.api.variant.BuildConfigField
+import com.android.build.api.variant.Variant
+import com.android.build.gradle.internal.tasks.factory.dependsOn
+import gradle.kotlin.dsl.accessors._ffe51ee91362977ddc98906f5440a003.android
 import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.tasks.TaskProvider
 import org.gradle.configurationcache.extensions.capitalized
+import java.io.File
 
 class TgPlugin : Plugin<Project> {
     override fun apply(target: Project) {
@@ -20,26 +20,57 @@ class TgPlugin : Plugin<Project> {
 
         val ext = target.extensions.create("tg", TgExtension::class.java)
 
-        val repository = TgRepository(
-            HttpClient(OkHttp) {
-                install(Logging) {
-                    logger = Logger.DEFAULT
-                    level = LogLevel.ALL
-                }
-            }
-        )
+        val repository = TgRepository.build()
 
         androidComponents.onVariants { variant ->
             println("Variant: ${variant.name}")
-            val artifacts = variant.artifacts.get(SingleArtifact.APK)
-            target.tasks.register(
-                "tgReportFor${variant.name.capitalized()}",
-                TgTask::class.java,
-                repository
-            ).configure {
-                apkDir.set(artifacts)
-                token.set(ext.token)
-                chatId.set(ext.chatId)
+            println("Code: ${target.android.defaultConfig.versionCode}")
+            val tgReportTask = target.configureTgReportTask(ext, variant, repository)
+            val apkSizeTask = target.configureApkSizeTask(ext, variant, repository)
+            tgReportTask.configure {
+                apkSizeMb.set(apkSizeTask.get().apkSizeMb)
+            }
+            tgReportTask.dependsOn(apkSizeTask)
+        }
+    }
+
+    private fun Project.configureTgReportTask(
+        extension: TgExtension,
+        variant: Variant,
+        repository: TgRepository
+    ): TaskProvider<TgTask> {
+        return tasks.register(
+            "tgReportFor${variant.name.capitalized()}",
+            TgTask::class.java,
+            repository
+        ).apply {
+            configure {
+                apkDir.set(variant.artifacts.get(SingleArtifact.APK))
+                token.set(extension.token)
+                chatId.set(extension.chatId)
+                apkVariant.set(variant.name)
+                apkVersionCode.set(android.defaultConfig.versionCode)
+            }
+        }
+    }
+
+    private fun Project.configureApkSizeTask(
+        extension: TgExtension,
+        variant: Variant,
+        repository: TgRepository
+    ): TaskProvider<ApkSizeTask> {
+        return tasks.register(
+            "validateApkSizeFor${variant.name.capitalized()}",
+            ApkSizeTask::class.java,
+            repository
+        ).apply {
+            configure {
+                apkDir.set(variant.artifacts.get(SingleArtifact.APK))
+                token.set(extension.token)
+                chatId.set(extension.chatId)
+                maxSizeMb.set(extension.maxSizeMb)
+                taskEnabled.set(extension.validateSize)
+                apkSizeMb.set(File("apk_size.txt"))
             }
         }
     }

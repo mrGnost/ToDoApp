@@ -7,6 +7,8 @@ plugins {
 tg {
     token.set(providers.environmentVariable("TG_TOKEN"))
     chatId.set(providers.environmentVariable("TG_CHAT_ID"))
+    validateSize.set(true)
+    maxSizeMb.set(10)
 }
 
 android {
