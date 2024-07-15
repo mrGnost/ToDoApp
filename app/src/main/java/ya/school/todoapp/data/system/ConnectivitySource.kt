@@ -17,7 +17,7 @@ class ConnectivitySource @Inject constructor(
     private val connectivityManager: ConnectivityManager
 ) {
     val isConnectedFlow: Flow<Boolean> = callbackFlow {
-        object : ConnectivityManager.NetworkCallback() {
+        val networkCallback = object : ConnectivityManager.NetworkCallback() {
             override fun onAvailable(network: Network) {
                 super.onAvailable(network)
                 trySend(true)
@@ -33,7 +33,10 @@ class ConnectivitySource @Inject constructor(
                 trySend(false)
             }
         }
-        awaitClose { }
+        connectivityManager.registerDefaultNetworkCallback(networkCallback)
+        awaitClose {
+            connectivityManager.unregisterNetworkCallback(networkCallback)
+        }
     }
 
     fun checkState(): Boolean {

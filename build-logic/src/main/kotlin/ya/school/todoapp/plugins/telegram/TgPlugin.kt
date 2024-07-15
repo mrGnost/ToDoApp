@@ -32,7 +32,7 @@ class TgPlugin : Plugin<Project> {
                 tgReportTask.configure {
                     apkSizeMb.set(apkSizeTask.get().apkSizeMb)
                 }
-                apkDetailTask.dependsOn(tgReportTask)
+                tgReportTask.get().finalizedBy(apkDetailTask)
             }
         }
     }

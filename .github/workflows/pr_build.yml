@@ -26,7 +26,7 @@ jobs:
         shell: bash
         run: chmod +x gradlew
       - name: Build with gradle
-        run: ./gradlew :app:reportApkWithDetailsForRelease $gradleFlags
+        run: ./gradlew :app:tgReportForRelease $gradleFlags
       - name: Upload apk
         uses: actions/upload-artifact@v4
         with:
