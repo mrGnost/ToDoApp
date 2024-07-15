@@ -28,6 +28,7 @@ class TaskFormViewModel @Inject constructor(
     private val editItemUseCase: EditItemUseCase,
     private val getItemUseCase: GetItemUseCase
 ) : ViewModel() {
+    lateinit var todoItem: TodoItem
     var currentText by mutableStateOf("")
     var currentImportance by mutableStateOf(TodoItem.Importance.Regular)
     var currentDate: Date? by mutableStateOf(null)
@@ -37,11 +38,12 @@ class TaskFormViewModel @Inject constructor(
         viewModelScope.launch {
             when (val result = getItemUseCase(id)) {
                 is TodoResult.Success -> with(result.data) {
+                    todoItem = this
                     currentText = text
                     currentImportance = importance
                     currentDate = deadline
                 }
-                is TodoResult.Error<*> -> {
+                is TodoResult.Error -> {
                     processError(result.message)
                 }
             }
@@ -57,12 +59,12 @@ class TaskFormViewModel @Inject constructor(
                     deadline = currentDate
                 )
             } else {
-                editItemUseCase(
-                    id = id,
+                todoItem = todoItem.copy(
                     text = currentText,
                     importance = currentImportance,
                     deadline = currentDate
                 )
+                editItemUseCase(todoItem)
             }
         }.await() // Требование: отменять всю background work при уходе с экрана - но нам нужно доделать сохранение
         return processEmptyResult(result)
@@ -80,7 +82,7 @@ class TaskFormViewModel @Inject constructor(
             is TodoResult.Success -> {
                 true
             }
-            is TodoResult.Error<*> -> {
+            is TodoResult.Error -> {
                 processError(result.message)
                 false
             }

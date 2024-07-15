@@ -9,26 +9,21 @@ import java.util.Date
  * Интерфейс репозитория, отвечающего за взаимодействие с локальным хранилищем задач
  */
 interface TodoItemsRepository {
-    fun getItems(): TodoResult<Flow<List<TodoItem>>>
+    fun getItems(): Flow<List<TodoItem>>
 
-    suspend fun updateAllItems(items: List<TodoItem>): TodoResult<Unit>
+    suspend fun updateAllItems(items: List<TodoItem>)
 
     suspend fun addItem(
         text: String,
         importance: TodoItem.Importance,
         deadline: Date?
-    ): TodoResult<TodoItem>
+    ): String
 
-    suspend fun changeCompletionStatus(id: String, complete: Boolean): TodoResult<TodoItem>
+    suspend fun changeCompletionStatus(id: String, complete: Boolean)
 
-    suspend fun removeItem(id: String): TodoResult<TodoItem>
+    suspend fun removeItem(id: String)
 
-    suspend fun changeItem(
-        id: String,
-        text: String,
-        importance: TodoItem.Importance,
-        deadline: Date?
-    ): TodoResult<TodoItem>
+    suspend fun changeItem(item: TodoItem)
 
     suspend fun getItem(id: String): TodoResult<TodoItem>
 }

@@ -8,8 +8,8 @@ import ya.school.todoapp.data.network.entity.TodoItemRequestDTO
 import ya.school.todoapp.data.network.entity.TodoItemResponseDTO
 import ya.school.todoapp.data.network.entity.TodoListRequestDTO
 import ya.school.todoapp.data.network.entity.TodoListResponseDTO
+import ya.school.todoapp.domain.entity.Revisioned
 import ya.school.todoapp.domain.entity.TodoItem
-import ya.school.todoapp.domain.entity.TodoItemList
 import ya.school.todoapp.domain.entity.TodoResult
 import ya.school.todoapp.domain.repository.NetworkRepository
 import javax.inject.Inject
@@ -20,55 +20,58 @@ import javax.inject.Inject
 class NetworkRepositoryImpl @Inject constructor(
     private val api: TodoApi
 ) : NetworkRepository {
-    override suspend fun getAllItems(): TodoResult<TodoItemList> = withContext(Dispatchers.IO) {
-        NetworkUtils.getResponse(
-            TodoListResponseDTO::toTodoItems
-        ) {
-            api.getAllItems()
+    override suspend fun getAllItems(): TodoResult<Revisioned<List<TodoItem>>> =
+        withContext(Dispatchers.IO) {
+            NetworkUtils.getResponse(
+                TodoListResponseDTO::toTodoItems
+            ) {
+                api.getAllItems()
+            }
         }
-    }
 
     override suspend fun updateItems(
-        items: TodoItemList,
-        revision: Int
-    ): TodoResult<TodoItem> = withContext(Dispatchers.IO) {
+        items: Revisioned<List<TodoItem>>
+    ): TodoResult<Revisioned<List<TodoItem>>> = withContext(Dispatchers.IO) {
         NetworkUtils.getResponse(
             TodoListResponseDTO::toTodoItems
         ) {
-            api.updateList(revision, TodoListRequestDTO.fromTodoItems(items))
+            api.updateList(items.revision, TodoListRequestDTO.fromTodoItems(items.data))
         }
     }
 
-    override suspend fun getItem(id: String): TodoResult<TodoItem> = withContext(Dispatchers.IO) {
-        NetworkUtils.getResponse(
-            TodoItemResponseDTO::toTodoItem
-        ) {
-            api.getItem(id)
+    override suspend fun getItem(id: String): TodoResult<Revisioned<TodoItem>> =
+        withContext(Dispatchers.IO) {
+            NetworkUtils.getResponse(
+                TodoItemResponseDTO::toTodoItem
+            ) {
+                api.getItem(id)
+            }
         }
-    }
 
-    override suspend fun addItem(item: TodoItem): TodoResult<TodoItem> = withContext(Dispatchers.IO) {
-        NetworkUtils.getResponse(
-            TodoItemResponseDTO::toTodoItem
-        ) {
-            val r = api.addItem(item.revision, TodoItemRequestDTO.fromTodoItem(item))
-            r
+    override suspend fun addItem(item: Revisioned<TodoItem>): TodoResult<Revisioned<TodoItem>> =
+        withContext(Dispatchers.IO) {
+            NetworkUtils.getResponse(
+                TodoItemResponseDTO::toTodoItem
+            ) {
+                api.addItem(item.revision, TodoItemRequestDTO.fromTodoItem(item.data))
+            }
         }
-    }
 
-    override suspend fun removeItem(id: String, revision: Int): TodoResult<TodoItem> = withContext(Dispatchers.IO) {
-        NetworkUtils.getResponse(
-            TodoItemResponseDTO::toTodoItem
-        ) {
-            api.deleteItem(revision, id)
+    override suspend fun removeItem(id: String, revision: Int): TodoResult<Revisioned<TodoItem>> =
+        withContext(Dispatchers.IO) {
+            NetworkUtils.getResponse(
+                TodoItemResponseDTO::toTodoItem
+            ) {
+                api.deleteItem(revision, id)
+            }
         }
-    }
 
-    override suspend fun changeItem(item: TodoItem): TodoResult<TodoItem> = withContext(Dispatchers.IO) {
-        NetworkUtils.getResponse(
-            TodoItemResponseDTO::toTodoItem
-        ) {
-            api.changeItem(item.revision, item.id, TodoItemRequestDTO.fromTodoItem(item))
+    override suspend fun changeItem(item: Revisioned<TodoItem>): TodoResult<Revisioned<TodoItem>> =
+        withContext(Dispatchers.IO) {
+            NetworkUtils.getResponse(
+                TodoItemResponseDTO::toTodoItem
+            ) {
+                api.changeItem(item.revision, item.data.id, TodoItemRequestDTO.fromTodoItem(item.data))
+            }
         }
-    }
 }

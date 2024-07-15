@@ -11,9 +11,9 @@ data class TodoItem(
     val importance: Importance,
     val deadline: Date? = null,
     val isDone: Boolean,
+    val files: List<String>? = null,
     val createdAt: Date,
-    val changedAt: Date? = null,
-    val revision: Int
+    val changedAt: Date? = null
 ) {
     enum class Importance {
         Low,

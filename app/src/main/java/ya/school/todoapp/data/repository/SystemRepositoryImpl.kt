@@ -12,4 +12,6 @@ class SystemRepositoryImpl @Inject constructor(
     private val source: ConnectivitySource
 ) : SystemRepository {
     override fun getNetworkUpdates(): Flow<Boolean> = source.isConnectedFlow
+
+    override fun getNetworkState(): Boolean = source.checkState()
 }
