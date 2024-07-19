@@ -11,9 +11,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.yandex.div.core.Div2Context
+import com.yandex.div.core.DivConfiguration
+import com.yandex.div.glide.GlideDivImageLoader
 import dagger.hilt.android.AndroidEntryPoint
 import ya.school.todoapp.presentation.ui.ToDoNavigation
 import ya.school.todoapp.presentation.ui.home.HomeScreen
+import ya.school.todoapp.presentation.ui.info.InfoScreen
+import ya.school.todoapp.presentation.ui.info.divkit.InfoDivActionHandler
 import ya.school.todoapp.presentation.ui.task.TaskFormScreen
 import ya.school.todoapp.presentation.ui.theme.ToDoAppTheme
 
@@ -34,14 +39,20 @@ class MainActivity : ComponentActivity() {
         setContent {
             navigator = ToDoNavigation(rememberNavController())
 
+            val divkitContext = Div2Context(
+                baseContext = this,
+                configuration = createDivConfiguration(navigator::navigateToHome),
+                lifecycleOwner = this
+            )
+
             ToDoAppTheme {
-                TodoNavGraph()
+                TodoNavGraph(divkitContext)
             }
         }
     }
 
     @Composable
-    private fun TodoNavGraph() {
+    private fun TodoNavGraph(divContext: Div2Context) {
         NavHost(
             navController = navigator.navController,
             startDestination = "home"
@@ -64,6 +75,16 @@ class MainActivity : ComponentActivity() {
                     taskId = backStackEntry.arguments?.getString("taskId")
                 )
             }
+            composable(ToDoNavigation.INFO_ROUTE) {
+                InfoScreen(divContext = divContext)
+            }
         }
+    }
+
+    private fun createDivConfiguration(navigateBack: () -> Unit): DivConfiguration {
+        return DivConfiguration.Builder(GlideDivImageLoader(this))
+            .actionHandler(InfoDivActionHandler(navigateBack))
+            .visualErrorsEnabled(true)
+            .build()
     }
 }

@@ -17,7 +17,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -56,7 +55,7 @@ fun HomeScreen(navigator: ToDoNavigation) {
         }
     }
 
-    var showCheckedItems by remember {
+    val showCheckedItems by remember {
         mutableStateOf(true)
     }
 
@@ -72,7 +71,7 @@ fun HomeScreen(navigator: ToDoNavigation) {
                 VisibilityButton(
                     show = showCheckedItems
                 ) {
-                    showCheckedItems = !showCheckedItems
+                    navigator.navigateToInfo()
                 }
             }
         },

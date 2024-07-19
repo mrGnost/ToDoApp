@@ -19,8 +19,12 @@ class ToDoNavigation(val navController: NavHostController) {
     fun navigateToTaskForm() =
         navController.navigate(TASK_ROUTE)
 
+    fun navigateToInfo() =
+        navController.navigate(INFO_ROUTE)
+
     companion object {
         const val HOME_ROUTE = "home"
         const val TASK_ROUTE = "task"
+        const val INFO_ROUTE = "info"
     }
 }
