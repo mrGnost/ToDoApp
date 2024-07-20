@@ -16,8 +16,8 @@ import ya.school.todoapp.presentation.ui.theme.AppTheme
 @Composable
 fun MainTopBar(
     text: String,
-    subtext: String,
-    scrollBehavior: TopAppBarScrollBehavior,
+    subtext: String = "",
+    scrollBehavior: TopAppBarScrollBehavior? = null,
     actions: @Composable RowScope.() -> Unit = { }
 ) {
     TopAppBar(

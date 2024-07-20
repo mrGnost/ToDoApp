@@ -5,7 +5,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -15,10 +18,12 @@ import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivConfiguration
 import com.yandex.div.glide.GlideDivImageLoader
 import dagger.hilt.android.AndroidEntryPoint
+import ya.school.todoapp.domain.entity.ThemeMode
 import ya.school.todoapp.presentation.ui.ToDoNavigation
 import ya.school.todoapp.presentation.ui.home.HomeScreen
 import ya.school.todoapp.presentation.ui.info.InfoScreen
 import ya.school.todoapp.presentation.ui.info.divkit.InfoDivActionHandler
+import ya.school.todoapp.presentation.ui.settings.SettingsScreen
 import ya.school.todoapp.presentation.ui.task.TaskFormScreen
 import ya.school.todoapp.presentation.ui.theme.ToDoAppTheme
 
@@ -41,11 +46,19 @@ class MainActivity : ComponentActivity() {
 
             val divkitContext = Div2Context(
                 baseContext = this,
-                configuration = createDivConfiguration(navigator::navigateToHome),
+                configuration = createDivConfiguration(navigator::navigateBack),
                 lifecycleOwner = this
             )
 
-            ToDoAppTheme {
+            val themeMode = viewModel.getThemeFlow().collectAsState()
+
+            ToDoAppTheme(
+                darkTheme = when (themeMode.value) {
+                    ThemeMode.System -> isSystemInDarkTheme()
+                    ThemeMode.Dark -> true
+                    ThemeMode.Light -> false
+                }
+            ) {
                 TodoNavGraph(divkitContext)
             }
         }
@@ -58,11 +71,15 @@ class MainActivity : ComponentActivity() {
             startDestination = "home"
         ) {
             composable(ToDoNavigation.HOME_ROUTE) {
-                HomeScreen(navigator = navigator)
+                HomeScreen(
+                    navigator = navigator,
+                    viewModel = hiltViewModel()
+                )
             }
             composable(ToDoNavigation.TASK_ROUTE) {
                 TaskFormScreen(
                     navigator = navigator,
+                    viewModel = hiltViewModel(),
                     taskId = null
                 )
             }
@@ -72,11 +89,18 @@ class MainActivity : ComponentActivity() {
             ) { backStackEntry ->
                 TaskFormScreen(
                     navigator = navigator,
+                    viewModel = hiltViewModel(),
                     taskId = backStackEntry.arguments?.getString("taskId")
                 )
             }
             composable(ToDoNavigation.INFO_ROUTE) {
                 InfoScreen(divContext = divContext)
+            }
+            composable(ToDoNavigation.SETTINGS_ROUTE) {
+                SettingsScreen(
+                    navigator = navigator,
+                    viewModel = hiltViewModel()
+                )
             }
         }
     }

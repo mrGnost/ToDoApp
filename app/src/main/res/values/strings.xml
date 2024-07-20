@@ -12,4 +12,10 @@
     <string name="importance_none">Нет</string>
     <string name="importance_high">Высокий</string>
     <string name="backend_error">Не удалось связаться с сервером</string>
+    <string name="settings">Настройки</string>
+    <string name="theme">Тема</string>
+    <string name="theme_light">Всегда светлая</string>
+    <string name="theme_dark">Всегда тёмная</string>
+    <string name="theme_system">Как в системе</string>
+    <string name="app_info">О приложении</string>
 </resources>
