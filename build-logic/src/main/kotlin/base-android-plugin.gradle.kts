@@ -49,6 +49,12 @@ dependencies {
     kapt(libs.room.compiler)
     implementation(libs.room.ktx)
 
+    // Divkit
+    implementation(libs.divkit)
+    implementation(libs.divkit.core)
+    implementation(libs.divkit.json)
+    implementation(libs.divkit.glide)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

@@ -37,8 +37,11 @@ import ya.school.todoapp.presentation.ui.theme.ToDoAppTheme
 import ya.school.todoapp.presentation.ui.util.DateUtil.toDateString
 
 @Composable
-fun TaskFormScreen(navigator: ToDoNavigation, taskId: String?) {
-    val viewModel: TaskFormViewModel = hiltViewModel()
+fun TaskFormScreen(
+    navigator: ToDoNavigation,
+    viewModel: TaskFormViewModel,
+    taskId: String?
+) {
     val snackbarHostState = remember { SnackbarHostState() }
     val composableScope = rememberCoroutineScope()
 
@@ -131,6 +134,7 @@ fun TaskFormScreenPreviewLight() {
     ToDoAppTheme(darkTheme = false) {
         TaskFormScreen(
             navigator = ToDoNavigation(NavHostController(LocalContext.current)),
+            viewModel = hiltViewModel(),
             taskId = "0"
         )
     }
@@ -142,6 +146,7 @@ fun TaskFormScreenPreviewDark() {
     ToDoAppTheme(darkTheme = true) {
         TaskFormScreen(
             navigator = ToDoNavigation(NavHostController(LocalContext.current)),
+            viewModel = hiltViewModel(),
             taskId = "0"
         )
     }

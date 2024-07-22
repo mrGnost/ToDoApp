@@ -1,5 +1,6 @@
 package ya.school.todoapp.presentation.ui.theme
 
+import androidx.compose.material3.ColorScheme
 import androidx.compose.ui.graphics.Color
 
 data class AppColors(
@@ -20,6 +21,7 @@ data class AppColors(
     val backPrimary: Color,
     val backSecondary: Color,
     val backElevated: Color,
+    val material: ColorScheme,
     val isLight: Boolean
 )
 

@@ -19,6 +19,7 @@ hilt-work = "1.2.0"
 datastore = "1.1.1"
 room = "2.6.1"
 ktor = "2.3.12"
+divkit = "30.9.0"
 
 [libraries]
 agp = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
@@ -57,6 +58,11 @@ okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor",
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+
+divkit = { group = "com.yandex.div", name = "div", version.ref = "divkit" }
+divkit-core = { group = "com.yandex.div", name = "div-core", version.ref = "divkit" }
+divkit-json = { group = "com.yandex.div", name = "div-json", version.ref = "divkit" }
+divkit-glide = { group = "com.yandex.div", name = "glide", version.ref = "divkit" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

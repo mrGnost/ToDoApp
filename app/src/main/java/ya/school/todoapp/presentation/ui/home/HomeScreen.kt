@@ -39,8 +39,10 @@ import ya.school.todoapp.presentation.ui.theme.ToDoAppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navigator: ToDoNavigation) {
-    val viewModel: HomeViewModel = hiltViewModel()
+fun HomeScreen(
+    navigator: ToDoNavigation,
+    viewModel: HomeViewModel
+) {
     val snackbarHostState = remember { SnackbarHostState() }
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -73,6 +75,9 @@ fun HomeScreen(navigator: ToDoNavigation) {
                     show = showCheckedItems
                 ) {
                     showCheckedItems = !showCheckedItems
+                }
+                SettingsButton {
+                    navigator.navigateToSettings()
                 }
             }
         },
@@ -140,11 +145,28 @@ fun VisibilityButton(
     }
 }
 
+@Composable
+fun SettingsButton(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
+) {
+    IconButton(
+        modifier = modifier,
+        onClick = onClick
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.settings),
+            contentDescription = null,
+            tint = AppTheme.colors.blue
+        )
+    }
+}
+
 @Preview
 @Composable
 fun HomeScreenPreviewLight() {
     ToDoAppTheme(darkTheme = false) {
-        HomeScreen(navigator = ToDoNavigation(NavHostController(LocalContext.current)))
+        HomeScreen(navigator = ToDoNavigation(NavHostController(LocalContext.current)), hiltViewModel())
     }
 }
 
@@ -152,6 +174,6 @@ fun HomeScreenPreviewLight() {
 @Composable
 fun HomeScreenPreviewDark() {
     ToDoAppTheme(darkTheme = true) {
-        HomeScreen(navigator = ToDoNavigation(NavHostController(LocalContext.current)))
+        HomeScreen(navigator = ToDoNavigation(NavHostController(LocalContext.current)), hiltViewModel())
     }
 }

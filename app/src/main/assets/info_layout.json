@@ -1,0 +1,186 @@
+{
+  "templates": {
+    "tutorialCard": {
+      "type": "container",
+      "items": [
+        {
+          "type": "text",
+          "font_size": 21,
+          "font_weight": "bold",
+          "margins": {
+            "bottom": 16
+          },
+          "$text": "title"
+        },
+        {
+          "type": "state",
+          "id": "text_expanded_state",
+          "default_state_id": "collapsed",
+          "states": [
+            {
+              "state_id": "collapsed",
+              "div": {
+                "type": "text",
+                "font_size": 16,
+                "margins": {
+                  "bottom": 16
+                },
+                "height": {
+                  "type": "wrap_content"
+                },
+                "$text": "body",
+                "actions": [
+                  {
+                    "log_id": "expand_text",
+                    "url": "div-action://set_state?state_id=0/text_expanded_state/expanded"
+                  }
+                ]
+              }
+            },
+            {
+
+              "state_id": "expanded",
+              "div": {
+                "type": "text",
+                "font_size": 16,
+                "margins": {
+                  "bottom": 16
+                },
+                "height": {
+                  "type": "fixed",
+                  "value": 100
+                },
+                "$text": "body",
+                "actions": [
+                  {
+                    "log_id": "collapse_text",
+                    "url": "div-action://set_state?state_id=0/text_expanded_state/collapsed"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "container",
+          "orientation": "horizontal",
+          "$items": "links"
+        },
+        {
+          "type": "container",
+          "background": [
+            {
+              "type": "solid",
+              "color": "#34c759"
+            }
+          ],
+          "border": {
+            "corner_radius": 24
+          },
+          "content_alignment_horizontal": "center",
+          "alignment_horizontal": "center",
+          "width": {
+            "type": "fixed",
+            "value": 150
+          },
+          "paddings": {
+            "top": 10,
+            "left": 10,
+            "bottom": 10,
+            "right": 10
+          },
+          "items": [
+            {
+              "type": "text",
+              "$text": "button_text",
+              "text_color": "#fff",
+              "font_size": 21,
+              "font_weight": "bold",
+              "text_alignment_horizontal": "center"
+            }
+          ],
+          "actions": [
+            {
+              "log_id": "exit",
+              "url": "div-action://exit"
+            }
+          ]
+        }
+      ],
+      "margins": {
+        "bottom": 6
+      },
+      "orientation": "vertical",
+      "paddings": {
+        "top": 10,
+        "bottom": 0,
+        "left": 30,
+        "right": 30
+      }
+    },
+    "link": {
+      "type": "image",
+      "action": {
+        "$url": "link",
+        "$log_id": "log"
+      },
+      "scale": "fit",
+      "margins": {
+        "bottom": 20,
+        "top": 20,
+        "left": 10,
+        "right": 10
+      },
+      "$image_url": "src"
+    }
+  },
+  "card": {
+    "log_id": "div2_sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "items": [
+            {
+              "type": "image",
+              "image_url": "https://cdn-icons-png.flaticon.com/512/14018/14018771.png",
+              "margins": {
+                "top": 10,
+                "right": 60,
+                "bottom": 10,
+                "left": 60
+              }
+            },
+            {
+              "type": "tutorialCard",
+              "title": "Todo App",
+              "body": "Это приложение разработано для упрощения ежедневной рутины. Добавьте задачу, укажите ее приоритет и проставьте дедлайн - и можно не переживать, что важное дело вылетит из головы!\n\nПриложение разработано в качестве проекта Школы мобильной разработки Яндекса. Ознакомиться с исходным кодом или связаться с автором можно по ссылкам ниже:",
+              "links": [
+                {
+                  "type": "link",
+                  "link": "https://github.com/mrGnost/ToDoApp/",
+                  "src": "https://cdn-icons-png.flaticon.com/512/25/25231.png",
+                  "log": "github"
+                },
+                {
+                  "type": "link",
+                  "link": "https://t.me/PlainSight/",
+                  "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Telegram_logo.svg/2048px-Telegram_logo.svg.png",
+                  "log": "telegram"
+                },
+                {
+                  "type": "link",
+                  "link": "https://vk.com/plainsight/",
+                  "src": "https://cdn-icons-png.flaticon.com/512/733/733583.png",
+                  "log": "vk"
+                }
+              ],
+              "button_text": "Понятно!"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
