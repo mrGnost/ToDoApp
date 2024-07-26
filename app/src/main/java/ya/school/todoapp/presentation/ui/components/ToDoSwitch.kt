@@ -4,15 +4,18 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import ya.school.todoapp.presentation.ui.theme.AppTheme
 
 @Composable
 fun ToDoSwitch(
     checked: Boolean,
+    modifier: Modifier = Modifier,
     onCheckedChange: (Boolean) -> Unit
 ) {
     Switch(
+        modifier = modifier,
         checked = checked,
         onCheckedChange = onCheckedChange,
         colors = SwitchDefaults.colors(
