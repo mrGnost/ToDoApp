@@ -18,6 +18,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
@@ -35,11 +39,21 @@ fun ToDoListItem(
     onCheckedChange: (String, Boolean) -> Unit,
     onInfoClick: (String) -> Unit
 ) {
+    val description = when (item.importance) {
+        TodoItem.Importance.Low -> stringResource(id = R.string.task_not_important_description)
+        TodoItem.Importance.Urgent -> stringResource(id = R.string.task_important_description)
+        TodoItem.Importance.Regular -> stringResource(id = R.string.task_description)
+    }
+
     Row(
         modifier = Modifier
             .background(AppTheme.colors.backSecondary)
             .clickable { onInfoClick(item.id) }
             .padding(10.dp)
+            .semantics {
+                contentDescription = description
+                testTag = item.id
+            }
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -147,6 +161,8 @@ fun ToDoCheckBox(
     important: Boolean,
     onCheckedChange: (String, Boolean) -> Unit
 ) {
+    val taskCheckboxDescription = stringResource(id = R.string.task_checkbox_description)
+
     Checkbox(
         checked = checked,
         colors = CheckboxDefaults.colors(
@@ -157,11 +173,15 @@ fun ToDoCheckBox(
                 else
                     supportSeparator
             },
-
         ),
         onCheckedChange = {
             onCheckedChange(id, !checked)
-        }
+        },
+        modifier = Modifier
+            .semantics {
+                contentDescription = taskCheckboxDescription
+                testTag = "$id-checkbox"
+            }
     )
 }
 

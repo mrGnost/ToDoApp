@@ -24,6 +24,10 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -41,7 +45,7 @@ import ya.school.todoapp.presentation.ui.theme.ToDoAppTheme
 @Composable
 fun HomeScreen(
     navigator: ToDoNavigation,
-    viewModel: HomeViewModel
+    viewModel: HomeViewModel = hiltViewModel()
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -128,8 +132,15 @@ fun VisibilityButton(
     show: Boolean = true,
     onClick: () -> Unit
 ) {
+    val description = stringResource(id = R.string.show_done_description)
+
     IconButton(
-        modifier = modifier,
+        modifier = modifier
+            .semantics {
+                contentDescription = description
+                selected = show
+                testTag = "complete_visible_button"
+            },
         onClick = onClick
     ) {
         val visibilityIcon = when (show) {
@@ -150,8 +161,13 @@ fun SettingsButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
+    val description = stringResource(id = R.string.open_settings_description)
+
     IconButton(
-        modifier = modifier,
+        modifier = modifier
+            .semantics {
+                contentDescription = description
+            },
         onClick = onClick
     ) {
         Icon(

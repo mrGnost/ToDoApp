@@ -39,8 +39,8 @@ import ya.school.todoapp.presentation.ui.util.DateUtil.toDateString
 @Composable
 fun TaskFormScreen(
     navigator: ToDoNavigation,
-    viewModel: TaskFormViewModel,
-    taskId: String?
+    viewModel: TaskFormViewModel = hiltViewModel(),
+    taskId: String? = null
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val composableScope = rememberCoroutineScope()

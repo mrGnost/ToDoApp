@@ -18,4 +18,11 @@
     <string name="theme_dark">Всегда тёмная</string>
     <string name="theme_system">Как в системе</string>
     <string name="app_info">О приложении</string>
+    <string name="task_checkbox_description">Задача выполнена</string>
+    <string name="task_important_description">Важная задача</string>
+    <string name="task_description">Задача</string>
+    <string name="task_not_important_description">Не важная задача</string>
+    <string name="show_done_description">Показывать выполненные задачи</string>
+    <string name="open_settings_description">Настройки</string>
+    <string name="deadline_switch_description">Установить дедлайн</string>
 </resources>
