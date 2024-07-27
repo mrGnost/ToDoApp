@@ -28,6 +28,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import ya.school.todoapp.domain.entity.TodoItem
@@ -42,6 +44,9 @@ fun ToDoListColumn(
 ) {
     LazyColumn(
         modifier = modifier
+            .semantics {
+                testTag = "todo_list"
+            }
     ) {
         itemsIndexed(
             items = tasks,

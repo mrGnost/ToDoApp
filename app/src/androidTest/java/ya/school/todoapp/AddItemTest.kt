@@ -1,43 +1,45 @@
 package ya.school.todoapp
 
-import androidx.activity.ComponentActivity
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.test.hasTestTag
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavType
-import androidx.navigation.compose.ComposeNavigator
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
-import androidx.navigation.testing.TestNavHostController
-import org.junit.Before
+import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.performScrollToNode
+import androidx.compose.ui.test.performTextReplacement
+import dagger.hilt.android.testing.HiltAndroidTest
+import junit.framework.TestCase.assertEquals
 import org.junit.Rule
 import org.junit.Test
-import ya.school.todoapp.presentation.ui.home.HomeScreen
-import ya.school.todoapp.presentation.ui.navigation.ToDoNavigation
-import ya.school.todoapp.presentation.ui.navigation.TodoNavGraph
-import ya.school.todoapp.presentation.ui.task.TaskFormScreen
+import ya.school.todoapp.presentation.MainActivity
 
+@HiltAndroidTest
 class AddItemTest {
     @get:Rule
-    val composeTestRule = createAndroidComposeRule<ComponentActivity>()
-
-    private lateinit var navController: TestNavHostController
-
-    @Before
-    fun setup() {
-        composeTestRule.setContent {
-            navController = TestNavHostController(LocalContext.current)
-            navController.navigatorProvider.addNavigator(ComposeNavigator())
-            TestNavGraph(navigator = ToDoNavigation(navController))
-        }
-    }
+    val composeTestRule = createAndroidComposeRule(MainActivity::class.java)
 
     @Test
-    fun addItemTest() {
-        composeTestRule.onNodeWithTag("add_item_btn").performClick()
+    fun clickOnAddItemButton() {
+        val randomText = "random text"
 
+        composeTestRule.waitForIdle()
+        val itemsCount = composeTestRule
+            .onAllNodes(hasTestTag("todo_item"))
+            .fetchSemanticsNodes()
+            .size
+        composeTestRule.onNodeWithTag("add_item_btn").performClick()
+        composeTestRule.waitForIdle()
+        composeTestRule.onNodeWithTag("text_input").performTextReplacement(randomText)
+        composeTestRule.onNodeWithTag("save_btn").performClick()
+        composeTestRule.waitForIdle()
+        val newItemCount = composeTestRule
+            .onAllNodes(hasTestTag("todo_item"))
+            .fetchSemanticsNodes()
+            .size
+        assertEquals(newItemCount, itemsCount)
+        composeTestRule.onNodeWithTag("todo_list")
+            .performScrollToNode(hasText(randomText))
+            .assertExists()
     }
 }

@@ -38,4 +38,5 @@ dependencies {
     kapt(libs.hilt.android.compiler)
     implementation(libs.hilt.navigation.compose)
     implementation(libs.hilt.work)
+    androidTestImplementation(libs.hilt.testing)
 }

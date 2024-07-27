@@ -52,7 +52,7 @@ fun ToDoListItem(
             .padding(10.dp)
             .semantics {
                 contentDescription = description
-                testTag = item.id
+                testTag = "todo_item"
             }
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
