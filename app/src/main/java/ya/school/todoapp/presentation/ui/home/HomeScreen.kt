@@ -32,7 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import ya.school.todoapp.R
-import ya.school.todoapp.presentation.ui.ToDoNavigation
+import ya.school.todoapp.presentation.ui.navigation.ToDoNavigation
 import ya.school.todoapp.presentation.ui.components.ElevatedContainer
 import ya.school.todoapp.presentation.ui.components.MainSurface
 import ya.school.todoapp.presentation.ui.components.ToDoFAB
@@ -50,10 +50,6 @@ fun HomeScreen(
     val snackbarHostState = remember { SnackbarHostState() }
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-
-    LaunchedEffect(Unit) {
-        viewModel.startItemsObservation()
-    }
 
     LaunchedEffect(key1 = viewModel.snackBarMessage) {
         viewModel.snackBarMessage?.let {

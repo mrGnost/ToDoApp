@@ -21,7 +21,6 @@ room = "2.6.1"
 ktor = "2.3.12"
 divkit = "30.9.0"
 mockk = "1.13.12"
-robolectric = "4.13"
 
 [libraries]
 agp = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
@@ -48,6 +47,7 @@ androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx-compose-navigation-testing = { group = "androidx.navigation", name = "navigation-testing", version.ref = "navigation" }
 
 androidx-work = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "workManager" }
 

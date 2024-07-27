@@ -26,13 +26,19 @@ class HomeViewModel @Inject constructor(
     val getAllItemsUseCase: GetAllItemsUseCase,
     val changeCompletionUseCase: ChangeCompletionUseCase
 ) : ViewModel() {
-    val _todoItemsFlow = MutableStateFlow<List<TodoItem>>(emptyList())
+    private val _todoItemsFlow = MutableStateFlow<List<TodoItem>>(emptyList())
     val todoItemsFlow: Flow<List<TodoItem>>
         get() = _todoItemsFlow
 
     var snackBarMessage: String? by mutableStateOf(null)
 
-    suspend fun startItemsObservation() {
+    init {
+        viewModelScope.launch {
+            startItemsObservation()
+        }
+    }
+
+    private suspend fun startItemsObservation() {
         when (val result = getAllItemsUseCase()) {
             is TodoResult.Success -> result.data.collect {
                 _todoItemsFlow.value = it
