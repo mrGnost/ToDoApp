@@ -103,6 +103,54 @@ class ServerTest {
         }
     }
 
+    @Test
+    fun `Edit existing task`() {
+        val task = TodoItem("a", "a", TodoItem.Importance.Regular, isDone = false, createdAt = Date())
+        val revisionedTask = Revisioned(task, 1)
+        webServer.setAddResponse(id = task.id, code = 200)
+        runBlocking {
+            try {
+                val item = repository.changeItem(revisionedTask)
+                assert(item is TodoResult.Success)
+                assertEquals((item as TodoResult.Success).data.data.id, task.id)
+            } catch (e: Exception) {
+                assert(false)
+            }
+        }
+    }
+
+    @Test
+    fun `Edit task that doesn't exist`() {
+        val task = TodoItem("a", "a", TodoItem.Importance.Regular, isDone = false, createdAt = Date())
+        val revisionedTask = Revisioned(task, 1)
+        webServer.setAddResponse(id = task.id, code = 404)
+        runBlocking {
+            try {
+                val item = repository.changeItem(revisionedTask)
+                assert(item is TodoResult.Error)
+                assertEquals((item as TodoResult.Error).message, "Ошибка: элемент не найден")
+            } catch (e: Exception) {
+                assert(false)
+            }
+        }
+    }
+
+    @Test
+    fun `Edit task with conflicting revisions`() {
+        val task = TodoItem("a", "a", TodoItem.Importance.Regular, isDone = false, createdAt = Date())
+        val revisionedTask = Revisioned(task, 1)
+        webServer.setAddResponse(id = task.id, code = 400)
+        runBlocking {
+            try {
+                val item = repository.changeItem(revisionedTask)
+                assert(item is TodoResult.Error)
+                assertEquals((item as TodoResult.Error).message, "Ошибка синхронизации данных")
+            } catch (e: Exception) {
+                assert(false)
+            }
+        }
+    }
+
     @After
     fun shutdown() {
         webServer.shutdown()
