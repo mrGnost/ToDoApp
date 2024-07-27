@@ -15,13 +15,14 @@ import org.junit.Test
 import ya.school.todoapp.presentation.MainActivity
 
 @HiltAndroidTest
-class AddItemTest {
+class EditItemTest {
     @get:Rule
     val composeTestRule = createAndroidComposeRule(MainActivity::class.java)
 
     @Test
     fun clickOnAddItemButton() {
         val randomText = "random text"
+        val anotherText = "another text"
 
         composeTestRule.waitForIdle()
         val itemsCount = composeTestRule
@@ -33,13 +34,16 @@ class AddItemTest {
         composeTestRule.onNodeWithTag("text_input").performTextReplacement(randomText)
         composeTestRule.onNodeWithTag("save_btn").performClick()
         composeTestRule.waitForIdle()
-        val newItemCount = composeTestRule
-            .onAllNodes(hasTestTag("todo_item"))
-            .fetchSemanticsNodes()
-            .size
-        assertEquals(newItemCount, itemsCount + 1)
         composeTestRule.onNodeWithTag("todo_list")
             .performScrollToNode(hasText(randomText))
-        composeTestRule.onNodeWithText(randomText).assertExists()
+        composeTestRule.onNodeWithText(randomText).performClick()
+        composeTestRule.waitForIdle()
+        composeTestRule.onNodeWithTag("text_input").performTextReplacement(anotherText)
+        composeTestRule.onNodeWithTag("save_btn").performClick()
+        composeTestRule.waitForIdle()
+        composeTestRule.onNodeWithTag("todo_list")
+            .performScrollToNode(hasText(anotherText))
+        composeTestRule.onNodeWithText(anotherText).assertExists()
+        composeTestRule.onNodeWithText(randomText).assertDoesNotExist()
     }
 }
