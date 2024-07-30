@@ -20,6 +20,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ya.school.todoapp.R
@@ -86,18 +88,19 @@ fun DeadlineRow(
     onDateChanged: (Date?) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    var checked by remember {
+        mutableStateOf(false)
+    }
+    var showCalendar by remember {
+        mutableStateOf(false)
+    }
+    val pickerDescription = stringResource(id = R.string.deadline_switch_description)
+
     Row(
         modifier = modifier
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        var checked by remember {
-            mutableStateOf(false)
-        }
-        var showCalendar by remember {
-            mutableStateOf(false)
-        }
-
         Column(
             modifier = Modifier
                 .clickable {
@@ -120,7 +123,11 @@ fun DeadlineRow(
             onCheckedChange = {
                 checked = !checked
                 showCalendar = true
-            }
+            },
+            modifier = Modifier
+                .semantics {
+                    contentDescription = pickerDescription
+                }
         )
         if (showCalendar) {
             DeadlineDatePicker(

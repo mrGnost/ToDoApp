@@ -13,6 +13,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import ya.school.todoapp.presentation.ui.theme.AppTheme
 
@@ -33,6 +36,9 @@ fun RemoveButton(
                 if (isActive)
                     onClick()
             }
+            .semantics {
+                role = Role.Button
+            }
     ) {
         val color = with (AppTheme.colors) {
             if (isActive)
@@ -43,7 +49,7 @@ fun RemoveButton(
 
         Icon(
             imageVector = Icons.Filled.Delete,
-            contentDescription = "Удалить",
+            contentDescription = null,
             tint = color
         )
         Text(

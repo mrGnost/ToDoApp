@@ -13,8 +13,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import ya.school.todoapp.R
-import ya.school.todoapp.presentation.ui.ToDoNavigation
+import ya.school.todoapp.presentation.ui.navigation.ToDoNavigation
 import ya.school.todoapp.presentation.ui.components.MainSurface
 import ya.school.todoapp.presentation.ui.components.ThemeRow
 import ya.school.todoapp.presentation.ui.components.ToDoMainText
@@ -24,7 +25,7 @@ import ya.school.todoapp.presentation.ui.components.topbars.MainTopBar
 @Composable
 fun SettingsScreen(
     navigator: ToDoNavigation,
-    viewModel: SettingsViewModel
+    viewModel: SettingsViewModel = hiltViewModel()
 ) {
     val theme by viewModel.getThemeFlow().collectAsState()
 

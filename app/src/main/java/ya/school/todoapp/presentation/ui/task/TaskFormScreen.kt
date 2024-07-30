@@ -26,7 +26,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
 import ya.school.todoapp.R
-import ya.school.todoapp.presentation.ui.ToDoNavigation
+import ya.school.todoapp.presentation.ui.navigation.ToDoNavigation
 import ya.school.todoapp.presentation.ui.components.DeadlineRow
 import ya.school.todoapp.presentation.ui.components.FormTextInput
 import ya.school.todoapp.presentation.ui.components.ImportanceRow
@@ -39,8 +39,8 @@ import ya.school.todoapp.presentation.ui.util.DateUtil.toDateString
 @Composable
 fun TaskFormScreen(
     navigator: ToDoNavigation,
-    viewModel: TaskFormViewModel,
-    taskId: String?
+    viewModel: TaskFormViewModel = hiltViewModel(),
+    taskId: String? = null
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val composableScope = rememberCoroutineScope()

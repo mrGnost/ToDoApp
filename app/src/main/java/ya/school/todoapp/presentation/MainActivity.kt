@@ -19,10 +19,11 @@ import com.yandex.div.core.DivConfiguration
 import com.yandex.div.glide.GlideDivImageLoader
 import dagger.hilt.android.AndroidEntryPoint
 import ya.school.todoapp.domain.entity.ThemeMode
-import ya.school.todoapp.presentation.ui.ToDoNavigation
+import ya.school.todoapp.presentation.ui.navigation.ToDoNavigation
 import ya.school.todoapp.presentation.ui.home.HomeScreen
 import ya.school.todoapp.presentation.ui.info.InfoScreen
 import ya.school.todoapp.presentation.ui.info.divkit.InfoDivActionHandler
+import ya.school.todoapp.presentation.ui.navigation.TodoNavGraph
 import ya.school.todoapp.presentation.ui.settings.SettingsScreen
 import ya.school.todoapp.presentation.ui.task.TaskFormScreen
 import ya.school.todoapp.presentation.ui.theme.ToDoAppTheme
@@ -42,15 +43,8 @@ class MainActivity : ComponentActivity() {
         viewModel.startOnNetworkAvailableUpdates()
 
         setContent {
-            navigator = ToDoNavigation(rememberNavController())
-
-            val divkitContext = Div2Context(
-                baseContext = this,
-                configuration = createDivConfiguration(navigator::navigateBack),
-                lifecycleOwner = this
-            )
-
             val themeMode = viewModel.getThemeFlow().collectAsState()
+            navigator = ToDoNavigation(rememberNavController())
 
             ToDoAppTheme(
                 darkTheme = when (themeMode.value) {
@@ -59,56 +53,8 @@ class MainActivity : ComponentActivity() {
                     ThemeMode.Light -> false
                 }
             ) {
-                TodoNavGraph(divkitContext)
+                TodoNavGraph(this, navigator)
             }
         }
-    }
-
-    @Composable
-    private fun TodoNavGraph(divContext: Div2Context) {
-        NavHost(
-            navController = navigator.navController,
-            startDestination = "home"
-        ) {
-            composable(ToDoNavigation.HOME_ROUTE) {
-                HomeScreen(
-                    navigator = navigator,
-                    viewModel = hiltViewModel()
-                )
-            }
-            composable(ToDoNavigation.TASK_ROUTE) {
-                TaskFormScreen(
-                    navigator = navigator,
-                    viewModel = hiltViewModel(),
-                    taskId = null
-                )
-            }
-            composable(
-                "${ToDoNavigation.TASK_ROUTE}/{taskId}",
-                arguments = listOf(navArgument("taskId") { type = NavType.StringType })
-            ) { backStackEntry ->
-                TaskFormScreen(
-                    navigator = navigator,
-                    viewModel = hiltViewModel(),
-                    taskId = backStackEntry.arguments?.getString("taskId")
-                )
-            }
-            composable(ToDoNavigation.INFO_ROUTE) {
-                InfoScreen(divContext = divContext)
-            }
-            composable(ToDoNavigation.SETTINGS_ROUTE) {
-                SettingsScreen(
-                    navigator = navigator,
-                    viewModel = hiltViewModel()
-                )
-            }
-        }
-    }
-
-    private fun createDivConfiguration(navigateBack: () -> Unit): DivConfiguration {
-        return DivConfiguration.Builder(GlideDivImageLoader(this))
-            .actionHandler(InfoDivActionHandler(navigateBack))
-            .visualErrorsEnabled(true)
-            .build()
     }
 }

@@ -1,4 +1,4 @@
-package ya.school.todoapp.presentation.ui
+package ya.school.todoapp.presentation.ui.navigation
 
 import androidx.navigation.NavHostController
 
