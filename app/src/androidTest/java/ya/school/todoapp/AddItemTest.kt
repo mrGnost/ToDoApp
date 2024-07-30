@@ -23,23 +23,23 @@ class AddItemTest {
     fun clickOnAddItemButton() {
         val randomText = "random text"
 
-        composeTestRule.waitForIdle()
-        val itemsCount = composeTestRule
-            .onAllNodes(hasTestTag("todo_item"))
-            .fetchSemanticsNodes()
-            .size
-        composeTestRule.onNodeWithTag("add_item_btn").performClick()
-        composeTestRule.waitForIdle()
-        composeTestRule.onNodeWithTag("text_input").performTextReplacement(randomText)
-        composeTestRule.onNodeWithTag("save_btn").performClick()
-        composeTestRule.waitForIdle()
-        val newItemCount = composeTestRule
-            .onAllNodes(hasTestTag("todo_item"))
-            .fetchSemanticsNodes()
-            .size
-        assertEquals(newItemCount, itemsCount + 1)
-        composeTestRule.onNodeWithTag("todo_list")
-            .performScrollToNode(hasText(randomText))
-        composeTestRule.onNodeWithText(randomText).assertExists()
+        with (composeTestRule) {
+            waitForIdle()
+            val itemsCount = onAllNodes(hasTestTag("todo_item"))
+                .fetchSemanticsNodes()
+                .size
+            onNodeWithTag("add_item_btn").performClick()
+            waitForIdle()
+            onNodeWithTag("text_input").performTextReplacement(randomText)
+            onNodeWithTag("save_btn").performClick()
+            waitForIdle()
+            val newItemCount = onAllNodes(hasTestTag("todo_item"))
+                .fetchSemanticsNodes()
+                .size
+            assertEquals(newItemCount, itemsCount + 1)
+            onNodeWithTag("todo_list")
+                .performScrollToNode(hasText(randomText))
+            onNodeWithText(randomText).assertExists()
+        }
     }
 }
